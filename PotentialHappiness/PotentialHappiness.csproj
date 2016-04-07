@@ -57,6 +57,7 @@
     <Compile Include="Camera.cs" />
     <Compile Include="Characters\Character.cs" />
     <Compile Include="Characters\CharacterManager.cs" />
+    <Compile Include="Characters\PlayableCharacter.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="PotentialHappinessGame.cs" />
     <Compile Include="Map\MapCell.cs" />
