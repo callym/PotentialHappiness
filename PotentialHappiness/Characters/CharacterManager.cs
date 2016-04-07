@@ -15,6 +15,23 @@ namespace PotentialHappiness.Characters
 	{
 		public List<Character> Characters { get; private set; }
 
+		private Character _currentCharacter = null;
+		public Character CurrentCharacter
+		{
+			get
+			{
+				return _currentCharacter;
+			}
+			set
+			{
+				if (!Characters.Contains(value))
+				{
+					Characters.Add(value);
+				}
+				_currentCharacter = value;
+			}
+		}
+
 		public void Update(GameTime gameTime) => Characters.ForEach(c => c.Update(gameTime));
 
 		public void Draw(SpriteBatch spriteBatch)
