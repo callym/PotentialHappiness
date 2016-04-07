@@ -13,7 +13,7 @@ namespace PotentialHappiness.Characters
 	*/
 	public sealed class CharacterManager
 	{
-		public List<Character> Characters { get; private set; }
+		public HashSet<Character> Characters { get; private set; }
 
 		private Character _currentCharacter = null;
 		public Character CurrentCharacter
@@ -24,20 +24,26 @@ namespace PotentialHappiness.Characters
 			}
 			set
 			{
-				if (!Characters.Contains(value))
-				{
-					Characters.Add(value);
-				}
+				Characters.Add(value);
 				_currentCharacter = value;
 			}
 		}
 
-		public void Update(GameTime gameTime) => Characters.ForEach(c => c.Update(gameTime));
+		public void Update(GameTime gameTime)
+		{
+			foreach (Character c in Characters)
+			{
+				c.Update(gameTime);
+			}
+		}
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
 			spriteBatch.Begin(transformMatrix: Camera.Instance.ScaleMatrix);
-			Characters.ForEach(c => c.Draw(spriteBatch));
+			foreach (Character c in Characters)
+			{
+				c.Draw(spriteBatch);
+			}
 			spriteBatch.End();
 		}
 
@@ -51,7 +57,7 @@ namespace PotentialHappiness.Characters
 
 		private CharacterManager()
 		{
-			Characters = new List<Character>();
+			Characters = new HashSet<Character>();
 		}
 	}
 }

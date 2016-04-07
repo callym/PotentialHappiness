@@ -13,7 +13,7 @@ namespace PotentialHappiness.Map
 	*/
 	public sealed class MapManager
 	{
-		public List<TileMap> Maps { get; private set; }
+		public HashSet<TileMap> Maps { get; private set; }
 		private TileMap _currentMap = null;
 		public TileMap CurrentMap
 		{
@@ -23,10 +23,7 @@ namespace PotentialHappiness.Map
 			}
 			set
 			{
-				if (!Maps.Contains(value))
-				{
-					Maps.Add(value);
-				}
+				Maps.Add(value);
 				_currentMap = value;
 			}
 		}
@@ -45,7 +42,7 @@ namespace PotentialHappiness.Map
 
 		private MapManager()
 		{
-			Maps = new List<TileMap>();
+			Maps = new HashSet<TileMap>();
 		}
 	}
 }
