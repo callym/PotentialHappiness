@@ -97,6 +97,18 @@ namespace PotentialHappiness.Map
 			return false;
 		}
 
+		public bool IsInMap(int x, int y)
+		{
+			if (y < MapHeight && y > -1)
+			{
+				if (x < MapWidth && x > -1)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
 		public void Update(GameTime gameTime)
 		{
 
