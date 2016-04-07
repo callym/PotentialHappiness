@@ -10,11 +10,14 @@ namespace PotentialHappiness.Characters
 {
 	public class Character : GameObject
 	{
-		string Name = "";
+		public string Name { get; private set; }
+		protected int Speed = 1;
 
 		public Character(string name, Color characterColor) : base(characterColor)
 		{
 			Name = name;
+
+			CharacterManager.Instance.Characters.Add(this);
 		}
 	}
 }
