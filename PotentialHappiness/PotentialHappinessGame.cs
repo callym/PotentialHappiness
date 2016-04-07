@@ -16,6 +16,7 @@ namespace PotentialHappiness
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
 		VirtualScreen virtualScreen;
+		SpriteFont font;
 
 		public int VirtualScreenSize { get; }
 		public int ScreenSize { get; }
@@ -65,6 +66,8 @@ namespace PotentialHappiness
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
+			font = Content.Load<SpriteFont>("font");
+
 			// TODO: use this.Content to load your game content here
 		}
 
@@ -109,6 +112,10 @@ namespace PotentialHappiness
 			// TODO: Add your drawing code here
 			MapManager.Instance.Draw(spriteBatch);
 			CharacterManager.Instance.Draw(spriteBatch);
+
+			spriteBatch.Begin();
+			spriteBatch.DrawString(font, graphics.PreferredBackBufferFormat.ToString(), Vector2.Zero, Color.White);
+			spriteBatch.End();
 
 			virtualScreen.EndCapture();
 
