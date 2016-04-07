@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using PotentialHappiness.Map;
+using PotentialHappiness.Characters;
 
 namespace PotentialHappiness
 {
@@ -48,6 +49,9 @@ namespace PotentialHappiness
 			TargetElapsedTime = TimeSpan.FromSeconds(1 / 30.0f);
 
 			MapManager.Instance.CurrentMap = new TileMap();
+			CharacterManager.Instance.CurrentCharacter = new PlayableCharacter("Callym", Color.LightSkyBlue);
+			CharacterManager.Instance.CurrentCharacter.X = 5;
+			CharacterManager.Instance.CurrentCharacter.Y = 5;
 
 			base.Initialize();
 		}
@@ -86,6 +90,8 @@ namespace PotentialHappiness
 			}
 
 			Camera.Instance.Update(gameTime);
+			MapManager.Instance.Update(gameTime);
+			CharacterManager.Instance.Update(gameTime);
 
 			virtualScreen.Update();
 
@@ -102,6 +108,7 @@ namespace PotentialHappiness
 			GraphicsDevice.Clear(Color.Black);
 			// TODO: Add your drawing code here
 			MapManager.Instance.Draw(spriteBatch);
+			CharacterManager.Instance.Draw(spriteBatch);
 
 			virtualScreen.EndCapture();
 
