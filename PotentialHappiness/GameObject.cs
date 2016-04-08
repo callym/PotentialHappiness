@@ -5,18 +5,22 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using PotentialHappiness.Components;
 
 namespace PotentialHappiness
 {
 	public class GameObject
 	{
 		public Pixel Pixel;
+		public List<Component> Components;
+
 		public int X = 0;
 		public int Y = 0;
 		
 		public GameObject()
 		{
 			Pixel = new Pixel(Color.Black);
+			Components = new List<Component>();
 		}
 
 		public GameObject(Color color) : this()
@@ -32,7 +36,7 @@ namespace PotentialHappiness
 
 		public virtual void Update(GameTime gameTime)
 		{
-
+			Components.ForEach(c => c.Update(gameTime));
 		}
 
 		/// <summary>
