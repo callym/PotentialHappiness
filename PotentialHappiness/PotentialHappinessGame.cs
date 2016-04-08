@@ -45,6 +45,8 @@ namespace PotentialHappiness
 			Window.ClientSizeChanged += new EventHandler<EventArgs>(Window_ClientSizeChanged);
 			Window.AllowUserResizing = true;
 
+			GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+
 			IsMouseVisible = true;
 			IsFixedTimeStep = true;
 			TargetElapsedTime = TimeSpan.FromSeconds(1 / 30.0f);
@@ -66,7 +68,8 @@ namespace PotentialHappiness
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
-			font = Content.Load<SpriteFont>("font");
+			font = Content.Load<SpriteFont>("handy-font");
+			font.Spacing = -2;
 
 			// TODO: use this.Content to load your game content here
 		}
@@ -114,7 +117,7 @@ namespace PotentialHappiness
 			CharacterManager.Instance.Draw(spriteBatch);
 
 			spriteBatch.Begin();
-			spriteBatch.DrawString(font, graphics.PreferredBackBufferFormat.ToString(), Vector2.Zero, Color.White);
+			spriteBatch.DrawString(font, "abcdefABCDEF", Vector2.Zero, Color.White);
 			spriteBatch.End();
 
 			virtualScreen.EndCapture();
