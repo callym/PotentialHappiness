@@ -23,8 +23,7 @@ namespace PotentialHappiness.Screens
 															title,
 															ScreenManager.Instance.VirtualScreen.VirtualArea,
 															GraphicsExtensions.Alignment.Center,
-															Color.White,
-															2);
+															Color.White);
 			ScreenManager.Instance.SpriteBatch.End();
 
 			base.Draw(gameTime);

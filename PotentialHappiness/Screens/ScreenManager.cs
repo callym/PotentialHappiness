@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace PotentialHappiness.Screens
 {
-	public class ScreenManager : Game
+	public sealed class ScreenManager : Game
 	{
 		public GraphicsDeviceManager GraphicsDeviceManager;
 		public SpriteBatch SpriteBatch;
@@ -65,7 +65,7 @@ namespace PotentialHappiness.Screens
 			font.LineSpacing += 2;
 			AddFont("handy-font", font);
 
-			AddScreen(new TitleScreen());
+			AddScreen(new MapScreen());
 
 			base.LoadContent();
 		}

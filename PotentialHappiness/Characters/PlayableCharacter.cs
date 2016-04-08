@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using PotentialHappiness.Components;
 using PotentialHappiness.Map;
 
 namespace PotentialHappiness.Characters
@@ -13,28 +14,15 @@ namespace PotentialHappiness.Characters
 	{
 		public PlayableCharacter(string name, Color playerColor) : base(name, playerColor)
 		{
-
+			InputComponent input = new InputComponent(this);
+			input.AddEvent(Keys.Left, Input.Held, (o, e) => { this.ChangePosition(-Speed, 0); });
+			input.AddEvent(Keys.Right, Input.Held, (o, e) => { this.ChangePosition(Speed, 0); });
+			input.AddEvent(Keys.Up, Input.Held, (o, e) => { this.ChangePosition(0, -Speed); });
+			input.AddEvent(Keys.Down, Input.Held, (o, e) => { this.ChangePosition(0, Speed); });
 		}
 
 		public override void Update(GameTime gameTime)
 		{
-			KeyboardState ks = Keyboard.GetState();
-			if (ks.IsKeyDown(Keys.Left))
-			{
-				ChangePosition(-Speed, 0);
-			}
-			if (ks.IsKeyDown(Keys.Right))
-			{
-				ChangePosition(Speed, 0);
-			}
-			if (ks.IsKeyDown(Keys.Up))
-			{
-				ChangePosition(0, -Speed);
-			}
-			if (ks.IsKeyDown(Keys.Down))
-			{
-				ChangePosition(0, Speed);
-			}
 			Camera.Instance.SetPosition(X, Y);
 
 			base.Update(gameTime);
