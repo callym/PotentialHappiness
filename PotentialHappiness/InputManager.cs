@@ -19,12 +19,26 @@ namespace PotentialHappiness
 	public sealed class InputManager
 	{
 		public HashSet<InputComponent> InputComponents;
+		HashSet<InputComponent> componentsToAdd;
+		HashSet<InputComponent> componentsToRemove;
 		KeyboardState previousState;
 
 		private InputManager()
 		{
 			InputComponents = new HashSet<InputComponent>();
+			componentsToAdd = new HashSet<InputComponent>();
+			componentsToRemove = new HashSet<InputComponent>();
 			previousState = Keyboard.GetState();
+		}
+
+		public void AddComponent(InputComponent inputComponent)
+		{
+			componentsToAdd.Add(inputComponent);
+		}
+
+		public void RemoveComponent(InputComponent inputComponent)
+		{
+			componentsToRemove.Add(inputComponent);
 		}
 
 		public void Update(GameTime gameTime)
@@ -70,6 +84,18 @@ namespace PotentialHappiness
 			}
 
 			previousState = currentState;
+
+			foreach (InputComponent i in componentsToAdd)
+			{
+				InputComponents.Add(i);
+			}
+			componentsToAdd.Clear();
+
+			foreach (InputComponent i in componentsToRemove)
+			{
+				InputComponents.Remove(i);
+			}
+			componentsToRemove.Clear();
 		}
 
 		private static readonly Lazy<InputManager> lazy = new Lazy<InputManager>(() => new InputManager());

@@ -21,7 +21,6 @@ namespace PotentialHappiness.Screens
 
 		public override void Update(GameTime gameTime)
 		{
-			InputManager.Instance.Update(gameTime);
 			Camera.Instance.Update(gameTime);
 			MapManager.Instance.Update(gameTime);
 			CharacterManager.Instance.Update(gameTime);

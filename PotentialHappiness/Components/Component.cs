@@ -10,12 +10,18 @@ namespace PotentialHappiness.Components
 {
 	public class Component
 	{
-		public GameObject Parent { get; }
+		public GameObject Parent { get; private set; }
 
 		public Component(GameObject parent)
 		{
 			Parent = parent;
-			Parent.Components.Add(this);
+			Parent.AddComponent(this);
+		}
+
+		public virtual void Unload()
+		{
+			Parent.RemoveComponent(this);
+			Parent = null;
 		}
 
 		public virtual void Update(GameTime gameTime)

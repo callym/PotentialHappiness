@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using PotentialHappiness.GameObjects;
 
 namespace PotentialHappiness.Screens
 {
@@ -12,6 +14,12 @@ namespace PotentialHappiness.Screens
 		public bool IsActive = true;
 		public bool IsPopup = false;
 		public Color BackgroundColor = Color.CornflowerBlue;
+		public List<GameObject> GameObjects;
+
+		public GameScreen()
+		{
+			GameObjects = new List<GameObject>();
+		}
 
 		public virtual void LoadAssets()
 		{
@@ -20,17 +28,21 @@ namespace PotentialHappiness.Screens
 
 		public virtual void UnloadAssets()
 		{
-
+			GameObjects.ForEach(go => go.Unload());
 		}
 
 		public virtual void Update(GameTime gameTime)
 		{
-
+			InputManager.Instance.Update(gameTime);
+			GameObjects.ForEach(go => go.Update(gameTime));
 		}
 
 		public virtual void Draw(GameTime gameTime)
 		{
-
+			SpriteBatch sb = ScreenManager.Instance.SpriteBatch;
+			sb.Begin();
+			GameObjects.ForEach(go => go.Draw(sb));
+			sb.End();
 		}
 	}
 }

@@ -13,7 +13,10 @@ namespace PotentialHappiness
 		[STAThread]
 		static void Main()
 		{
-			PotentialHappiness.Screens.ScreenManager.Instance.Main();
+			using (PotentialHappiness.Screens.ScreenManager manager = PotentialHappiness.Screens.ScreenManager.Instance)
+			{
+				manager.Run();
+			}
 		}
 	}
 }

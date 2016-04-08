@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using PotentialHappiness.Extensions;
+using Microsoft.Xna.Framework.Input;
+using PotentialHappiness.Components;
+using PotentialHappiness.GameObjects;
+using PotentialHappiness.Interface;
 
 namespace PotentialHappiness.Screens
 {
@@ -13,20 +16,16 @@ namespace PotentialHappiness.Screens
 		public TitleScreen() : base()
 		{
 			BackgroundColor = Color.Black;
-		}
 
-		public override void Draw(GameTime gameTime)
-		{
-			ScreenManager.Instance.SpriteBatch.Begin();
-			string title = "Potential\nHappiness";
-			ScreenManager.Instance.SpriteBatch.DrawString(ScreenManager.Instance.Fonts["handy-font"],
-															title,
-															ScreenManager.Instance.VirtualScreen.VirtualArea,
-															GraphicsExtensions.Alignment.Center,
-															Color.White);
-			ScreenManager.Instance.SpriteBatch.End();
+			TextBox titleText = new TextBox();
+			titleText.Area = ScreenManager.Instance.VirtualScreen.VirtualArea;
+			titleText.Text = "Potential\nHappiness";
+			GameObjects.Add(titleText);
 
-			base.Draw(gameTime);
+			GameObject input = new GameObject();
+			InputComponent ic = new InputComponent(input);
+			ic.AddEvent(Keys.Space, Input.Pressed, (o, e) => { ScreenManager.Instance.ChangeScreens(this, new MapScreen()); });
+			GameObjects.Add(input);
 		}
 	}
 }

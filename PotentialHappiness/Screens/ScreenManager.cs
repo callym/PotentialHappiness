@@ -17,6 +17,8 @@ namespace PotentialHappiness.Screens
 		public Dictionary<string, Texture2D> Textures2D;
 		public Dictionary<string, SpriteFont> Fonts;
 		public List<GameScreen> ScreenList;
+		List<GameScreen> screensToAdd;
+		List<GameScreen> screensToRemove;
 		public ContentManager ContentManager;
 		public VirtualScreen VirtualScreen;
 
@@ -40,6 +42,8 @@ namespace PotentialHappiness.Screens
 			Textures2D = new Dictionary<string, Texture2D>();
 			Fonts = new Dictionary<string, SpriteFont>();
 			ScreenList = new List<GameScreen>();
+			screensToAdd = new List<GameScreen>();
+			screensToRemove = new List<GameScreen>();
 
 			VirtualScreen = new VirtualScreen(VirtualScreenSize, VirtualScreenSize, GraphicsDevice);
 			Window.ClientSizeChanged += new EventHandler<EventArgs>(Window_ClientSizeChanged);
@@ -65,7 +69,7 @@ namespace PotentialHappiness.Screens
 			font.LineSpacing += 2;
 			AddFont("handy-font", font);
 
-			AddScreen(new MapScreen());
+			AddScreen(new TitleScreen());
 
 			base.LoadContent();
 		}
@@ -90,17 +94,31 @@ namespace PotentialHappiness.Screens
 					Exit();
 				}
 
-				int startIndex = ScreenList.Count - 1;
-				while (ScreenList[startIndex].IsPopup
-						&& ScreenList[startIndex].IsActive)
+				if (ScreenList.Count > 0)
 				{
-					startIndex--;
+					int startIndex = ScreenList.Count - 1;
+					while (ScreenList[startIndex].IsPopup
+							&& ScreenList[startIndex].IsActive)
+					{
+						startIndex--;
+					}
+
+					for (int i = startIndex; i < ScreenList.Count; i++)
+					{
+						ScreenList[i].Update(gameTime);
+					}
 				}
 
-				for (int i = startIndex; i < ScreenList.Count; i++)
+				screensToAdd.ForEach(s =>
 				{
-					ScreenList[i].Update(gameTime);
-				}
+					s.LoadAssets();
+					ScreenList.Add(s);
+				});
+				screensToAdd.Clear();
+
+				screensToRemove.ForEach(s => s.UnloadAssets());
+				ScreenList.RemoveAll(s => screensToRemove.Contains(s));
+				screensToRemove.Clear();
 
 				VirtualScreen.Update();
 			}
@@ -118,18 +136,21 @@ namespace PotentialHappiness.Screens
 		{
 			VirtualScreen.BeginCapture();
 
-			int startIndex = ScreenList.Count - 1;
-			while (ScreenList[startIndex].IsPopup)
+			if (ScreenList.Count > 0)
 			{
-				startIndex--;
-			}
+				int startIndex = ScreenList.Count - 1;
+				while (ScreenList[startIndex].IsPopup)
+				{
+					startIndex--;
+				}
 
-			GraphicsDevice.Clear(ScreenList[startIndex].BackgroundColor);
-			GraphicsDeviceManager.GraphicsDevice.Clear(ScreenList[startIndex].BackgroundColor);
+				GraphicsDevice.Clear(ScreenList[startIndex].BackgroundColor);
+				GraphicsDeviceManager.GraphicsDevice.Clear(ScreenList[startIndex].BackgroundColor);
 
-			for (int i = startIndex; i < ScreenList.Count; i++)
-			{
-				ScreenList[i].Draw(gameTime);
+				for (int i = startIndex; i < ScreenList.Count; i++)
+				{
+					ScreenList[i].Draw(gameTime);
+				}
 			}
 
 			VirtualScreen.EndCapture();
@@ -176,30 +197,26 @@ namespace PotentialHappiness.Screens
 
 		public void AddScreen(GameScreen gameScreen)
 		{
-			ScreenList.Add(gameScreen);
-			gameScreen.LoadAssets();
+			screensToAdd.Add(gameScreen);
 		}
 
 		public void RemoveScreen(GameScreen gameScreen)
 		{
-			gameScreen.UnloadAssets();
-			ScreenList.Remove(gameScreen);
+			screensToRemove.Add(gameScreen);
 
-			if (ScreenList.Count < 1)
+			if ((ScreenList.Count - screensToRemove.Count + screensToAdd.Count) < 1)
 			{
 				AddScreen(new TestScreen());
 			}
 		}
 
-		void Window_ClientSizeChanged(object sender, EventArgs e) => VirtualScreen.PhysicalResolutionChanged();
-
-		public void Main()
+		public void ChangeScreens(GameScreen currentScreen, GameScreen targetScreen)
 		{
-			using (ScreenManager manager = ScreenManager.Instance)
-			{
-				manager.Run();
-			}
+			AddScreen(targetScreen);
+			RemoveScreen(currentScreen);
 		}
+
+		void Window_ClientSizeChanged(object sender, EventArgs e) => VirtualScreen.PhysicalResolutionChanged();
 
 		private static readonly Lazy<ScreenManager> lazy = new Lazy<ScreenManager>(() => new ScreenManager());
 		public static ScreenManager Instance => lazy.Value;
