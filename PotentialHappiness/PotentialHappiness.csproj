@@ -61,8 +61,9 @@
     <Compile Include="Characters\PlayableCharacter.cs" />
     <Compile Include="Components\Component.cs" />
     <Compile Include="Components\InputComponent.cs" />
-    <Compile Include="GameObject.cs" />
+    <Compile Include="GameObjects\GameObject.cs" />
     <Compile Include="Extensions\GraphicsExtensions.cs" />
+    <Compile Include="GameObjects\PixelGameObject.cs" />
     <Compile Include="InputManager.cs" />
     <Compile Include="Map\MapCell.cs" />
     <Compile Include="Map\MapManager.cs" />
