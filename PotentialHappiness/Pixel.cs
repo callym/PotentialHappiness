@@ -28,7 +28,7 @@ namespace PotentialHappiness
 
 		public Pixel(Color color)
 		{
-			Texture = new Texture2D(PotentialHappinessGame.Instance.GraphicsDevice, 1, 1);
+			Texture = new Texture2D(Screens.ScreenManager.Instance.GraphicsDevice, 1, 1);
 			Color = color;
 		}
 	}

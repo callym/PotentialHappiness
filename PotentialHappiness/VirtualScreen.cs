@@ -9,11 +9,12 @@ using MonoGame;
 
 namespace PotentialHappiness
 {
-	class VirtualScreen
+	public class VirtualScreen
 	{
 		public int VirtualWidth { get; }
 		public int VirtualHeight { get; }
 		public float VirtualAspectRatio { get; }
+		public Rectangle VirtualArea { get; }
 
 		private GraphicsDevice graphicsDevice;
 		private RenderTarget2D screen;
@@ -26,6 +27,7 @@ namespace PotentialHappiness
 			VirtualWidth = vWidth;
 			VirtualHeight = vHeight;
 			VirtualAspectRatio = (float)VirtualWidth / (float)VirtualHeight;
+			VirtualArea = new Rectangle(0, 0, VirtualWidth, VirtualHeight);
 
 			graphicsDevice = gDevice;
 			screen = new RenderTarget2D(graphicsDevice,

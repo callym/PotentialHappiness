@@ -13,8 +13,7 @@ namespace PotentialHappiness
 		[STAThread]
 		static void Main()
 		{
-			using (var game = PotentialHappinessGame.Instance)
-				game.Run();
+			PotentialHappiness.Screens.ScreenManager.Instance.Main();
 		}
 	}
 }

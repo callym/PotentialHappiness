@@ -30,11 +30,11 @@ namespace PotentialHappiness
 			bottom-right have (n-1)/nth "border" - which is the amount of map visible
 			*/
 			int borderSize = 8;
-			int borderTL = PotentialHappinessGame.Instance.VirtualScreenSize / (borderSize * Scale);
+			int borderTL = Screens.ScreenManager.Instance.VirtualScreenSize / (borderSize * Scale);
 			int borderBR = borderTL * (borderSize - 1);
 
-			newX -= PotentialHappinessGame.Instance.VirtualScreenSize / (2 * Scale);
-			newY -= PotentialHappinessGame.Instance.VirtualScreenSize / (2 * Scale);
+			newX -= Screens.ScreenManager.Instance.VirtualScreenSize / (2 * Scale);
+			newY -= Screens.ScreenManager.Instance.VirtualScreenSize / (2 * Scale);
 
 			int mapBorderX = MapManager.Instance.CurrentMap.MapWidth - borderBR;
 			int mapBorderY = MapManager.Instance.CurrentMap.MapHeight - borderBR;
