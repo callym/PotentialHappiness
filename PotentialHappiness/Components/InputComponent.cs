@@ -64,5 +64,7 @@ namespace PotentialHappiness.Components
 				d[key] += e;
 			}
 		}
+
+		public void AddEvent(Keys[] keys, Input type, EventHandler e) => Array.ForEach(keys, k => AddEvent(k, type, e));
 	}
 }
