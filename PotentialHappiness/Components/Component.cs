@@ -11,6 +11,7 @@ namespace PotentialHappiness.Components
 	public class Component
 	{
 		public GameObject Parent { get; private set; }
+		public bool Enabled = true;
 
 		public Component(GameObject parent)
 		{

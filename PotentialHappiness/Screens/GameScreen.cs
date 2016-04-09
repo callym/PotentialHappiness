@@ -34,14 +34,26 @@ namespace PotentialHappiness.Screens
 		public virtual void Update(GameTime gameTime)
 		{
 			InputManager.Instance.Update(gameTime);
-			GameObjects.ForEach(go => go.Update(gameTime));
+			GameObjects.ForEach(go =>
+			{
+				if (go.Enabled)
+				{
+					go.Update(gameTime);
+				}
+			});
 		}
 
 		public virtual void Draw(GameTime gameTime)
 		{
 			SpriteBatch sb = ScreenManager.Instance.SpriteBatch;
 			sb.Begin();
-			GameObjects.ForEach(go => go.Draw(sb));
+			GameObjects.ForEach(go =>
+			{
+				if (go.Visible)
+				{
+					go.Draw(sb);
+				}
+			});
 			sb.End();
 		}
 	}

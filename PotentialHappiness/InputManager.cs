@@ -52,7 +52,7 @@ namespace PotentialHappiness
 				// still pressed
 				foreach (InputComponent i in InputComponents)
 				{
-					if (i.KeysHeld.ContainsKey(k))
+					if (i.Enabled && i.KeysHeld.ContainsKey(k))
 					{
 						i.KeysHeld[k].Invoke(this, EventArgs.Empty);
 					}
@@ -64,7 +64,7 @@ namespace PotentialHappiness
 				// new pressed
 				foreach (InputComponent i in InputComponents)
 				{
-					if (i.KeysPressed.ContainsKey(k))
+					if (i.Enabled && i.KeysPressed.ContainsKey(k))
 					{
 						i.KeysPressed[k].Invoke(this, EventArgs.Empty);
 					}
@@ -76,7 +76,7 @@ namespace PotentialHappiness
 				// new released
 				foreach (InputComponent i in InputComponents)
 				{
-					if (i.KeysReleased.ContainsKey(k))
+					if (i.Enabled && i.KeysReleased.ContainsKey(k))
 					{
 						i.KeysReleased[k].Invoke(this, EventArgs.Empty);
 					}

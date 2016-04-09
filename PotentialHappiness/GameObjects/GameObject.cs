@@ -15,6 +15,31 @@ namespace PotentialHappiness.GameObjects
 		List<Component> componentsToAdd;
 		List<Component> componentsToRemove;
 
+		bool _enabled = true;
+		public EventHandler OnEnable;
+		public EventHandler OnDisable;
+		public bool Enabled
+		{
+			get
+			{
+				return _enabled;
+			}
+			set
+			{
+				_enabled = value;
+				if (_enabled)
+				{
+					OnEnable.Invoke(this, EventArgs.Empty);
+				}
+				else
+				{
+					OnDisable.Invoke(this, EventArgs.Empty);
+				}
+			}
+		}
+
+		public bool Visible = true;
+
 		public int X = 0;
 		public int Y = 0;
 		
@@ -25,12 +50,12 @@ namespace PotentialHappiness.GameObjects
 			componentsToRemove = new List<Component>();
 		}
 
-		public void AddComponent(Component c)
+		public virtual void AddComponent(Component c)
 		{
 			componentsToAdd.Add(c);
 		}
 
-		public void RemoveComponent(Component c)
+		public virtual void RemoveComponent(Component c)
 		{
 			componentsToRemove.Add(c);
 		}
@@ -42,7 +67,13 @@ namespace PotentialHappiness.GameObjects
 
 		public virtual void Update(GameTime gameTime)
 		{
-			Components.ForEach(c => c.Update(gameTime));
+			Components.ForEach(c =>
+			{
+				if (c.Enabled)
+				{
+					c.Update(gameTime);
+				}
+			});
 			componentsToAdd.ForEach(c => Components.Add(c));
 			componentsToRemove.ForEach(c => Components.Remove(c));
 			componentsToAdd.Clear();
