@@ -14,9 +14,6 @@ namespace PotentialHappiness.Screens
 		public MapScreen() : base()
 		{
 			MapManager.Instance.CurrentMap = new TileMap();
-			CharacterManager.Instance.CurrentCharacter = new PlayableCharacter("Callym", Color.LightSkyBlue);
-			CharacterManager.Instance.CurrentCharacter.X = 5;
-			CharacterManager.Instance.CurrentCharacter.Y = 5;
 		}
 
 		public override void Update(GameTime gameTime)
@@ -34,7 +31,7 @@ namespace PotentialHappiness.Screens
 			CharacterManager.Instance.Draw(ScreenManager.Instance.SpriteBatch);
 
 			ScreenManager.Instance.SpriteBatch.Begin();
-			ScreenManager.Instance.SpriteBatch.DrawString(ScreenManager.Instance.Fonts["handy-font"], "abcdefABCDEF", Vector2.Zero, Color.White);
+			ScreenManager.Instance.SpriteBatch.DrawString(ScreenManager.Instance.Fonts["handy-font"], CharacterManager.Instance.CurrentCharacter.Name, Vector2.Zero, Color.White);
 			ScreenManager.Instance.SpriteBatch.End();
 
 			base.Draw(gameTime);
