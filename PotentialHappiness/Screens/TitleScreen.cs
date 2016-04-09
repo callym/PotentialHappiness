@@ -24,7 +24,7 @@ namespace PotentialHappiness.Screens
 
 			GameObject input = new GameObject();
 			InputComponent ic = new InputComponent(input);
-			ic.AddEvent(Keys.Space, Input.Pressed, (o, e) => { ScreenManager.Instance.ChangeScreens(this, new MapScreen()); });
+			ic.AddEvent(Keys.Space, Input.Pressed, (o, e) => { ScreenManager.Instance.ChangeScreens(this, new CharacterCreationScreen()); });
 			GameObjects.Add(input);
 		}
 	}
