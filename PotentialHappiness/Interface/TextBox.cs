@@ -16,16 +16,26 @@ namespace PotentialHappiness.Interface
 		public string Font { get; set; } = "handy-font";
 		public string Text { get; set; }
 		public Rectangle Area { get; set; }
+		public Color Color { get; set; } = Color.White;
 		public GraphicsExtensions.Alignment Alignment { get; set; } = GraphicsExtensions.Alignment.Center;
+
+		public TextBox() : base()
+		{
+
+		}
+
+		public TextBox(string text) : this()
+		{
+			Text = text;
+		}
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			string title = "Potential\nHappiness";
 			ScreenManager.Instance.SpriteBatch.DrawString(ScreenManager.Instance.Fonts[Font],
 															Text,
 															Area,
 															Alignment,
-															Color.White);
+															Color);
 			base.Draw(spriteBatch);
 		}
 	}
