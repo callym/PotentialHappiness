@@ -65,6 +65,7 @@
     <Compile Include="Extensions\GraphicsExtensions.cs" />
     <Compile Include="GameObjects\PixelGameObject.cs" />
     <Compile Include="InputManager.cs" />
+    <Compile Include="Interface\EditableTextBox.cs" />
     <Compile Include="Interface\TextBox.cs" />
     <Compile Include="Map\MapCell.cs" />
     <Compile Include="Map\MapManager.cs" />
