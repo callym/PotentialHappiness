@@ -39,7 +39,7 @@ namespace PotentialHappiness.Screens
 			ic.AddEvent(Keys.Enter, Input.Pressed, (o, e) =>
 			{
 				MapScreen map = new MapScreen();
-				PlayableCharacter player = new PlayableCharacter(nameText.Text, Color.Black);
+				PlayableCharacter player = new PlayableCharacter(nameText.Text, Color.Cyan);
 				CharacterManager.Instance.CurrentCharacter = player;
 				ScreenManager.Instance.ChangeScreens(this, map);
 			});

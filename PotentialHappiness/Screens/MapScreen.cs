@@ -31,7 +31,11 @@ namespace PotentialHappiness.Screens
 			CharacterManager.Instance.Draw(ScreenManager.Instance.SpriteBatch);
 
 			ScreenManager.Instance.SpriteBatch.Begin();
-			ScreenManager.Instance.SpriteBatch.DrawString(ScreenManager.Instance.Fonts["handy-font"], CharacterManager.Instance.CurrentCharacter.Name, Vector2.Zero, Color.White);
+			ScreenManager.Instance.SpriteBatch.DrawString(
+				ScreenManager.Instance.Fonts["handy-font"],
+				CharacterManager.Instance.CurrentCharacter.Name,
+				Vector2.Zero,
+				Color.Magenta);
 			ScreenManager.Instance.SpriteBatch.End();
 
 			base.Draw(gameTime);
