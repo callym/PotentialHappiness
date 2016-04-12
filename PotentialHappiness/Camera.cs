@@ -15,6 +15,7 @@ namespace PotentialHappiness
 		public int X = 0;
 		public int Y = 0;
 		public int Scale = 2;
+		public int BorderSize = 8;
 		public Matrix ScaleMatrix => Matrix.CreateScale(Scale);
 
 		public void Update(GameTime gameTime)
@@ -29,9 +30,8 @@ namespace PotentialHappiness
 			top-left sides have 1/nth border,
 			bottom-right have (n-1)/nth "border" - which is the amount of map visible
 			*/
-			int borderSize = 8;
-			int borderTL = Screens.ScreenManager.Instance.VirtualScreenSize / (borderSize * Scale);
-			int borderBR = borderTL * (borderSize - 1);
+			int borderTL = Screens.ScreenManager.Instance.VirtualScreenSize / (BorderSize * Scale);
+			int borderBR = borderTL * (BorderSize - 1);
 
 			newX -= Screens.ScreenManager.Instance.VirtualScreenSize / (2 * Scale);
 			newY -= Screens.ScreenManager.Instance.VirtualScreenSize / (2 * Scale);

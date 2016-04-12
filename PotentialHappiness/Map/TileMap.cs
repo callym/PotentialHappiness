@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using PotentialHappiness.Screens;
 
 namespace PotentialHappiness.Map
 {
@@ -84,16 +85,20 @@ namespace PotentialHappiness.Map
 
 		public bool IsVisible(int x, int y)
 		{
-			int cameraX = Camera.Instance.X;
-			int cameraY = Camera.Instance.Y;
+			int border = Camera.Instance.BorderSize / 2;
+			int screenSize = ScreenManager.Instance.VirtualScreenSize / Camera.Instance.Scale;
+			int cameraX = Math.Abs(Camera.Instance.X) - border;
+			int cameraY = Math.Abs(Camera.Instance.Y) - border;
 
-			if (y < MapHeight && y > -1)
+			int cameraWidth = cameraX + screenSize + border;
+			int cameraHeight = cameraY + screenSize + border;
+
+			if ((x >= cameraX && x < cameraWidth) &&
+				(y >= cameraY && y < cameraHeight))
 			{
-				if (x < MapWidth && x > -1)
-				{
-					return true;
-				}
+				return true;
 			}
+
 			return false;
 		}
 
@@ -116,11 +121,16 @@ namespace PotentialHappiness.Map
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
-/*			int visibleSquares = Camera.Instance.VisibleSquares;
-			int cameraX = Camera.Instance.X;
-			int cameraY = Camera.Instance.Y;*/
-
 			spriteBatch.Begin(transformMatrix: Camera.Instance.ScaleMatrix);
+			ForEach((c) =>
+			{
+				if (IsVisible(c.X, c.Y))
+				{
+					c.Draw(spriteBatch);
+				}
+			});
+			spriteBatch.End();
+		}
 			for (int y = 0; y < MapHeight; y++)
 			{
 				for (int x = 0; x < MapWidth; x++)
