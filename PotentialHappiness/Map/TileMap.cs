@@ -24,7 +24,7 @@ namespace PotentialHappiness.Map
 				MapRow thisRow = new MapRow();
 				for (int x = 0; x < MapWidth; x++)
 				{
-					MapCell newCell = new MapCell(Color.LightSeaGreen, x, y);
+					MapCell newCell = new MapCell(Color.LightSeaGreen, x, y, this);
 					thisRow.Columns.Add(newCell);
 				}
 				Rows.Add(thisRow);

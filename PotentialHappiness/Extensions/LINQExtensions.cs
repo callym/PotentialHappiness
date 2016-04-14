@@ -15,5 +15,13 @@ namespace PotentialHappiness.Extensions
 				action(ie.ElementAt(i), i);
 			}
 		}
+
+		public static void ForEach<T>(this IEnumerable<T> ie, Action<T> action)
+		{
+			for (int i = 0; i < ie.Count(); i++)
+			{
+				action(ie.ElementAt(i));
+			}
+		}
 	}
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using PotentialHappiness.AStar;
+using PotentialHappiness.Map.Areas;
 using PotentialHappiness.Map.Cells;
 using static PotentialHappiness.Extensions.LINQExtensions;
 
@@ -12,7 +13,7 @@ namespace PotentialHappiness.Map.Generators
 {
 	public class DungeonGenerator : MapGenerator
 	{
-		List<Rectangle> rooms = new List<Rectangle>();
+		HashSet<Room> rooms = new HashSet<Room>();
 		int roomCount = RandomManager.Instance.Next(10, 20);
 		int minSize = 10;
 		int maxSize = 20;
@@ -23,18 +24,6 @@ namespace PotentialHappiness.Map.Generators
 
 			GenerateRooms();
 
-			rooms.ForEach((r) =>
-			{
-				Color color = RandomManager.Instance.Color(Extensions.GraphicsExtensions.ColorTypes.Pastel);
-				Map.ForEach((c) =>
-				{
-					if (r.Contains(c.X, c.Y))
-					{
-						c.Pixel.Color = color;
-					}
-				});
-			});
-
 			GenerateCorridors();
 		}
 
@@ -42,43 +31,49 @@ namespace PotentialHappiness.Map.Generators
 		{
 			for (int i = 0; i < roomCount; i++)
 			{
-				Rectangle newRoom = CreateRoom();
-				rooms.Add(newRoom);
+				Room newRoom = CreateRoom();
+				if (newRoom != null)
+				{
+					rooms.Add(newRoom);
+				}
 			}
 
-			rooms.ForEachIndex((r, i) =>
+			rooms.ForEach((r) =>
 			{
 				int shrink = -1;
-				r.Inflate(shrink, shrink);
-				rooms[i] = r;
+				Rectangle shrunken = new Rectangle(r.Bounds.Location, r.Bounds.Size);
+				shrunken.Inflate(shrink, shrink);
+				r.Bounds = shrunken;
+				r.Recalculate();
 			});
 		}
 
 		void GenerateCorridors()
 		{
-			List<Rectangle> doneRooms = new List<Rectangle>();
+			List<Room> doneRooms = new List<Room>();
 			rooms.ForEach((r) => CreateCorridor(r, doneRooms));
 			rooms.ForEach((r) => CreateCorridor(r));
 		}
 
-		void CreateCorridor(Rectangle r, List<Rectangle> doneRooms = null)
+		Corridor CreateCorridor(Room r, List<Room> doneRooms = null)
 		{
-			Rectangle closestRoom = FindClosestRoom(r, doneRooms);
+			Room closestRoom = FindClosestRoom(r, doneRooms);
 
 			List<MapCell> cells = TileMapAStar.Instance.Pathfind(
-				Map[r.Center.X, r.Center.Y],
-				Map[closestRoom.Center.X, closestRoom.Center.Y],
+				Map[r.Bounds.Center.X, r.Bounds.Center.Y],
+				Map[closestRoom.Bounds.Center.X, closestRoom.Bounds.Center.Y],
 				Map);
 
 			doneRooms?.Add(r);
 
-			cells.ForEach((c) =>
-			{
-				c.Pixel.Color = Color.Beige;
-			});
+			Corridor corridor = new Corridor(Map);
+			corridor.Color = Color.Beige;
+			corridor.Add(cells);
+
+			return corridor;
 		}
 
-		Rectangle CreateRoom()
+		Room CreateRoom()
 		{
 			Rectangle? room = null;
 
@@ -96,19 +91,15 @@ namespace PotentialHappiness.Map.Generators
 				current++;
 			}
 
-			Rectangle successfulRoom;
 			if (room.HasValue && IsValid(room))
 			{
-				successfulRoom = room.Value;
-			}
-			else
-			{
-				// for now!! just make the room the first in the list
-				// needs to change when rooms become actual entities?
-				successfulRoom = rooms[0];
+				Room successfulRoom = new Room(Map);
+				successfulRoom.Color = RandomManager.Instance.Color(Extensions.GraphicsExtensions.ColorTypes.Pastel);
+				successfulRoom.Bounds = room.Value;
+				return successfulRoom;
 			}
 
-			return successfulRoom;
+			return null;
 		}
 
 		bool IsValid(Rectangle? room)
@@ -122,7 +113,7 @@ namespace PotentialHappiness.Map.Generators
 
 			rooms.ForEach((r) =>
 			{
-				if (r.Intersects(room.Value) || r.Contains(room.Value))
+				if (r.Bounds.Intersects(room.Value) || r.Bounds.Contains(room.Value))
 				{
 					b = false;
 				}
@@ -131,16 +122,16 @@ namespace PotentialHappiness.Map.Generators
 			return b;
 		}
 
-		Rectangle FindClosestRoom(Rectangle room, List<Rectangle> notTheseRooms = null)
+		Room FindClosestRoom(Room room, List<Room> notTheseRooms = null)
 		{
-			Rectangle closest = room;
+			Room closest = room;
 			int distance = 1000;
 
 			rooms.ForEach((r) =>
 			{
 				if (r != room && (!notTheseRooms?.Contains(r) ?? true))
 				{
-					int thisDistance = Math.Abs(room.Center.X - r.Center.X) + Math.Abs(room.Center.Y - r.Center.Y);
+					int thisDistance = Math.Abs(room.Bounds.Center.X - r.Bounds.Center.X) + Math.Abs(room.Bounds.Center.Y - r.Bounds.Center.Y);
 
 					if (thisDistance < distance)
 					{
