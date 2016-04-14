@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PotentialHappiness.Screens;
+using PotentialHappiness.Map.Cells;
 
 namespace PotentialHappiness.Map
 {
@@ -14,6 +15,8 @@ namespace PotentialHappiness.Map
 		public List<MapRow> Rows = new List<MapRow>();
 		public int MapWidth = 64;
 		public int MapHeight = 64;
+
+		Random r = new Random();
 
 		public TileMap()
 		{
@@ -24,61 +27,11 @@ namespace PotentialHappiness.Map
 				{
 					MapCell newCell = new MapCell(Color.LightSeaGreen, x, y);
 					thisRow.Columns.Add(newCell);
-
-					if (x == (MapWidth / 2))
-					{
-						newCell.Pixel.Color = Color.DeepPink;
-					}
 				}
 				Rows.Add(thisRow);
-
-				if (y == (MapHeight / 2))
-				{
-					Rows[y].Columns.ForEach(c => c.Pixel.Color = Color.Crimson);
-				}
 			}
 
-			Rows[0].Columns[3].Pixel.Color = Color.Yellow;
-			Rows[0].Columns[4].Pixel.Color = Color.Yellow;
-			Rows[0].Columns[5].Pixel.Color = Color.Brown;
-			Rows[0].Columns[6].Pixel.Color = Color.Brown;
-			Rows[0].Columns[7].Pixel.Color = Color.Brown;
-
-			Rows[1].Columns[3].Pixel.Color = Color.Yellow;
-			Rows[1].Columns[4].Pixel.Color = Color.Brown;
-			Rows[1].Columns[5].Pixel.Color = Color.Brown;
-			Rows[1].Columns[6].Pixel.Color = Color.Brown;
-			Rows[1].Columns[7].Pixel.Color = Color.Brown;
-
-			Rows[2].Columns[2].Pixel.Color = Color.Yellow;
-			Rows[2].Columns[3].Pixel.Color = Color.Brown;
-			Rows[2].Columns[4].Pixel.Color = Color.Brown;
-			Rows[2].Columns[5].Pixel.Color = Color.Brown;
-			Rows[2].Columns[6].Pixel.Color = Color.Brown;
-			Rows[2].Columns[7].Pixel.Color = Color.Brown;
-
-			Rows[3].Columns[2].Pixel.Color = Color.Yellow;
-			Rows[3].Columns[3].Pixel.Color = Color.Brown;
-			Rows[3].Columns[4].Pixel.Color = Color.Brown;
-			Rows[3].Columns[5].Pixel.Color = Color.Green;
-			Rows[3].Columns[6].Pixel.Color = Color.Green;
-			Rows[3].Columns[7].Pixel.Color = Color.Green;
-
-			Rows[4].Columns[2].Pixel.Color = Color.Yellow;
-			Rows[4].Columns[3].Pixel.Color = Color.Brown;
-			Rows[4].Columns[4].Pixel.Color = Color.Brown;
-			Rows[4].Columns[5].Pixel.Color = Color.Green;
-			Rows[4].Columns[6].Pixel.Color = Color.Green;
-			Rows[4].Columns[7].Pixel.Color = Color.Green;
-
-			Rows[5].Columns[2].Pixel.Color = Color.Yellow;
-			Rows[5].Columns[3].Pixel.Color = Color.Brown;
-			Rows[5].Columns[4].Pixel.Color = Color.Brown;
-			Rows[5].Columns[5].Pixel.Color = Color.Green;
-			Rows[5].Columns[6].Pixel.Color = Color.Green;
-			Rows[5].Columns[7].Pixel.Color = Color.Green;
-
-			Rows[63].Columns[63].Pixel.Color = Color.Magenta;
+			GenerateDungeon();
 
 			MapManager.Instance.Maps.Add(this);
 		}
@@ -114,6 +67,8 @@ namespace PotentialHappiness.Map
 			return false;
 		}
 
+		public bool IsInMap(MapCell cell) => IsInMap(cell.X, cell.Y);
+
 		public void Update(GameTime gameTime)
 		{
 
@@ -131,17 +86,79 @@ namespace PotentialHappiness.Map
 			});
 			spriteBatch.End();
 		}
+
+		public MapCell this[int x, int y] => Rows[y].Columns[x];
+
+		public void ForEach(Action<MapCell> action)
+		{
 			for (int y = 0; y < MapHeight; y++)
 			{
 				for (int x = 0; x < MapWidth; x++)
 				{
-					if (IsVisible(x, y))
-					{
-						Rows[y].Columns[x].Draw(spriteBatch);
-					}
+					action(this[x, y]);
 				}
 			}
-			spriteBatch.End();
 		}
+
+		void GenerateDungeon()
+		{
+			MarkAllUnvisited();
+
+			//GenerateRooms();
+
+			ForEach((c) => c.Pixel.Color = c.Visited ? Color.White : Color.Black);
+		}
+
+		void GenerateRooms()
+		{
+			int numberOfTries = r.Next(5, 10);
+			
+			for (int i = 0; i < numberOfTries; i++)
+			{
+				int width = r.Next(15, 45);
+				int height = r.Next(15, 45);
+
+				int x = r.Next(1, MapWidth - width - 1);
+				int y = r.Next(1, MapHeight - height - 1);
+
+				ForEach((c) =>
+				{
+					if (c.X > (x) && c.X < (x + width) &&
+						c.Y > (y) && c.Y < (y + height))
+					{
+						c.Visited = true;
+					}
+				});
+			}
+		}
+
+		List<MapCell> GetAdjacentCells(MapCell cell)
+		{
+			List<MapCell> cells = new List<MapCell>();
+
+			int x = cell.X;
+			int y = cell.Y;
+
+			if (IsInMap(this[x + 1, y]))
+			{
+				cells.Add(this[x + 1, y]);
+			}
+			if (IsInMap(this[x - 1, y]))
+			{
+				cells.Add(this[x - 1, y]);
+			}
+			if (IsInMap(this[x, y + 1]))
+			{
+				cells.Add(this[x, y + 1]);
+			}
+			if (IsInMap(this[x, y - 1]))
+			{
+				cells.Add(this[x, y - 1]);
+			}
+
+			return cells;
+		}
+
+		void MarkAllUnvisited() => ForEach((c) => c.Visited = false);
 	}
 }
