@@ -38,7 +38,7 @@ namespace PotentialHappiness.GameObjects
 			spriteBatch.Draw(
 				Pixel.Texture,
 				new Rectangle(Camera.Instance.ToCamera(X, Y), new Point(1, 1)),
-				Color.White);
+				Pixel.Color);
 
 			base.Draw(spriteBatch);
 		}

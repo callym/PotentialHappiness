@@ -69,6 +69,10 @@ namespace PotentialHappiness.Screens
 			font.LineSpacing += 2;
 			AddFont("handy-font", font);
 
+			Texture2D pixelTexture = new Texture2D(GraphicsDevice, 1, 1);
+			pixelTexture.SetData(new Color[1] { Color.White });
+			Textures2D.Add("Pixel", pixelTexture);
+
 			AddScreen(new TitleScreen());
 
 			base.LoadContent();
