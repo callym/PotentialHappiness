@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using PotentialHappiness.AStar;
+using PotentialHappiness.Map.Cells;
 using static PotentialHappiness.Extensions.LINQExtensions;
 
 namespace PotentialHappiness.Map.Generators
@@ -32,6 +34,8 @@ namespace PotentialHappiness.Map.Generators
 					}
 				});
 			});
+
+			GenerateCorridors();
 		}
 
 		void GenerateRooms()
@@ -47,6 +51,30 @@ namespace PotentialHappiness.Map.Generators
 				int shrink = -1;
 				r.Inflate(shrink, shrink);
 				rooms[i] = r;
+			});
+		}
+
+		void GenerateCorridors()
+		{
+			List<Rectangle> doneRooms = new List<Rectangle>();
+			rooms.ForEach((r) => CreateCorridor(r, doneRooms));
+			rooms.ForEach((r) => CreateCorridor(r));
+		}
+
+		void CreateCorridor(Rectangle r, List<Rectangle> doneRooms = null)
+		{
+			Rectangle closestRoom = FindClosestRoom(r, doneRooms);
+
+			List<MapCell> cells = TileMapAStar.Instance.Pathfind(
+				Map[r.Center.X, r.Center.Y],
+				Map[closestRoom.Center.X, closestRoom.Center.Y],
+				Map);
+
+			doneRooms?.Add(r);
+
+			cells.ForEach((c) =>
+			{
+				c.Pixel.Color = Color.Beige;
 			});
 		}
 
@@ -101,6 +129,28 @@ namespace PotentialHappiness.Map.Generators
 			});
 
 			return b;
+		}
+
+		Rectangle FindClosestRoom(Rectangle room, List<Rectangle> notTheseRooms = null)
+		{
+			Rectangle closest = room;
+			int distance = 1000;
+
+			rooms.ForEach((r) =>
+			{
+				if (r != room && (!notTheseRooms?.Contains(r) ?? true))
+				{
+					int thisDistance = Math.Abs(room.Center.X - r.Center.X) + Math.Abs(room.Center.Y - r.Center.Y);
+
+					if (thisDistance < distance)
+					{
+						distance = thisDistance;
+						closest = r;
+					}
+				}
+			});
+
+			return closest;
 		}
 	}
 }
