@@ -112,5 +112,35 @@ namespace PotentialHappiness.Extensions
 
 			return sb.ToString();
 		}
+
+		public enum ColorTypes
+		{
+			Pastel
+		}
+
+		public static Color RandomColor(this Random random, ColorTypes type)
+		{
+			Color color = Color.White;
+
+			switch (type)
+			{
+				case ColorTypes.Pastel:
+					byte[] colorBytes = new byte[3];
+					for (int i = 0; i < colorBytes.Length; i++)
+					{
+						colorBytes[i] = (byte)(RandomManager.Instance.Next(128) + 127);
+					}
+					color = new Color();
+					color.A = 255;
+					color.R = colorBytes[0];
+					color.G = colorBytes[1];
+					color.B = colorBytes[2];
+					break;
+				default:
+					break;
+			}
+
+			return color;
+		}
 	}
 }
