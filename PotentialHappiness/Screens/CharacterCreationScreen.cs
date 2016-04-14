@@ -10,6 +10,7 @@ using PotentialHappiness.Components;
 using PotentialHappiness.GameObjects;
 using PotentialHappiness.Interface;
 using PotentialHappiness.Map;
+using PotentialHappiness.Map.Areas;
 
 namespace PotentialHappiness.Screens
 {
@@ -40,6 +41,11 @@ namespace PotentialHappiness.Screens
 			{
 				MapScreen map = new MapScreen();
 				PlayableCharacter player = new PlayableCharacter(nameText.Text, Color.Cyan);
+				Room startingRoom = (Room)MapManager.Instance.CurrentMap.Features.Find((f) =>
+				{
+					return f is Room;
+				});
+				player.SetPosition(startingRoom.Bounds.Center.X, startingRoom.Bounds.Center.Y);
 				CharacterManager.Instance.CurrentCharacter = player;
 				ScreenManager.Instance.ChangeScreens(this, map);
 			});

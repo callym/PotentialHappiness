@@ -14,6 +14,7 @@ namespace PotentialHappiness.Map.Generators
 	public class DungeonGenerator : MapGenerator
 	{
 		HashSet<Room> rooms = new HashSet<Room>();
+		HashSet<Corridor> corridors = new HashSet<Corridor>();
 		int roomCount = RandomManager.Instance.Next(10, 20);
 		int minSize = 10;
 		int maxSize = 20;
@@ -25,6 +26,9 @@ namespace PotentialHappiness.Map.Generators
 			GenerateRooms();
 
 			GenerateCorridors();
+
+			Map.Features.AddRange(rooms);
+			Map.Features.AddRange(corridors);
 		}
 
 		void GenerateRooms()
@@ -55,7 +59,7 @@ namespace PotentialHappiness.Map.Generators
 			rooms.ForEach((r) => CreateCorridor(r));
 		}
 
-		Corridor CreateCorridor(Room r, List<Room> doneRooms = null)
+		void CreateCorridor(Room r, List<Room> doneRooms = null)
 		{
 			Room closestRoom = FindClosestRoom(r, doneRooms);
 
@@ -70,7 +74,7 @@ namespace PotentialHappiness.Map.Generators
 			corridor.Color = Color.Beige;
 			corridor.Add(cells);
 
-			return corridor;
+			corridors.Add(corridor);
 		}
 
 		Room CreateRoom()

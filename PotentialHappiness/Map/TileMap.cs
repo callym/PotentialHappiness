@@ -18,6 +18,8 @@ namespace PotentialHappiness.Map
 		public int MapWidth = 64;
 		public int MapHeight = 64;
 
+		public List<Feature> Features = new List<Feature>();
+
 		public TileMap()
 		{
 			for (int y = 0; y < MapHeight; y++)
