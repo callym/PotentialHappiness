@@ -13,6 +13,34 @@ namespace PotentialHappiness.GameObjects
 	{
 		public Pixel Pixel;
 
+		public override int X
+		{
+			get
+			{
+				return base.X;
+			}
+
+			set
+			{
+				base.X = value;
+				Pixel.X = value * Camera.Instance.Scale;
+			}
+		}
+
+		public override int Y
+		{
+			get
+			{
+				return base.Y;
+			}
+
+			set
+			{
+				base.Y = value;
+				Pixel.Y = value * Camera.Instance.Scale;
+			}
+		}
+
 		public PixelGameObject() : base()
 		{
 			Pixel = new Pixel(Color.Black);
@@ -37,7 +65,7 @@ namespace PotentialHappiness.GameObjects
 		{
 			spriteBatch.Draw(
 				Pixel.Texture,
-				new Rectangle(Camera.Instance.ToCamera(X, Y), new Point(1, 1)),
+				new Rectangle(Camera.Instance.ToCamera(Pixel.X, Pixel.Y), new Point(Camera.Instance.Scale)),
 				Pixel.Color);
 
 			base.Draw(spriteBatch);

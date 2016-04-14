@@ -28,7 +28,7 @@ namespace PotentialHappiness.Map.Cells
 			Color color = Feature?.Color ?? Pixel.Color;
 			spriteBatch.Draw(
 				Pixel.Texture,
-				new Rectangle(Camera.Instance.ToCamera(X, Y), new Point(1, 1)),
+				new Rectangle(Camera.Instance.ToCamera(Pixel.X, Pixel.Y), new Point(Camera.Instance.Scale)),
 				color);
 			//base.Draw(spriteBatch);
 		}

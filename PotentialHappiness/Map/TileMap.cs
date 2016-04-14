@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using PotentialHappiness.Screens;
 using PotentialHappiness.Map.Cells;
 using PotentialHappiness.Map.Generators;
+using PotentialHappiness.Map.Areas;
 
 namespace PotentialHappiness.Map
 {
@@ -24,7 +25,7 @@ namespace PotentialHappiness.Map
 				MapRow thisRow = new MapRow();
 				for (int x = 0; x < MapWidth; x++)
 				{
-					MapCell newCell = new MapCell(Color.LightSeaGreen, x, y, this);
+					MapCell newCell = new MapCell(Color.Black, x, y, this);
 					thisRow.Columns.Add(newCell);
 				}
 				Rows.Add(thisRow);
@@ -39,7 +40,7 @@ namespace PotentialHappiness.Map
 		public bool IsVisible(int x, int y)
 		{
 			int border = Camera.Instance.BorderSize / 2;
-			int screenSize = ScreenManager.Instance.VirtualScreenSize / Camera.Instance.Scale;
+			int screenSize = ScreenManager.Instance.VirtualScreenSize;
 			int cameraX = Math.Abs(Camera.Instance.X) - border;
 			int cameraY = Math.Abs(Camera.Instance.Y) - border;
 
@@ -76,10 +77,10 @@ namespace PotentialHappiness.Map
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
-			spriteBatch.Begin(transformMatrix: Camera.Instance.ScaleMatrix);
+			spriteBatch.Begin();
 			ForEach((c) =>
 			{
-				if (IsVisible(c.X, c.Y))
+				if (IsVisible(c.Pixel.X, c.Pixel.Y))
 				{
 					c.Draw(spriteBatch);
 				}

@@ -14,7 +14,7 @@ namespace PotentialHappiness
 	{
 		public int X = 0;
 		public int Y = 0;
-		public int Scale = 2;
+		public int Scale = 4;
 		public int BorderSize = 8;
 		public Matrix ScaleMatrix => Matrix.CreateScale(Scale);
 
@@ -33,11 +33,11 @@ namespace PotentialHappiness
 			int borderTL = Screens.ScreenManager.Instance.VirtualScreenSize / (BorderSize * Scale);
 			int borderBR = borderTL * (BorderSize - 1);
 
-			newX -= Screens.ScreenManager.Instance.VirtualScreenSize / (2 * Scale);
-			newY -= Screens.ScreenManager.Instance.VirtualScreenSize / (2 * Scale);
+			newX -= Screens.ScreenManager.Instance.VirtualScreenSize / (Scale / 2);
+			newY -= Screens.ScreenManager.Instance.VirtualScreenSize / (Scale / 2);
 
-			int mapBorderX = MapManager.Instance.CurrentMap.MapWidth - borderBR;
-			int mapBorderY = MapManager.Instance.CurrentMap.MapHeight - borderBR;
+			int mapBorderX = (MapManager.Instance.CurrentMap.MapWidth * Scale) - borderBR;
+			int mapBorderY = (MapManager.Instance.CurrentMap.MapHeight * Scale) - borderBR;
 
 			newX = -newX;
 			newY = -newY;

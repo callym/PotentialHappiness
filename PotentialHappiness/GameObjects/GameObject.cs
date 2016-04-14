@@ -40,8 +40,8 @@ namespace PotentialHappiness.GameObjects
 
 		public bool Visible = true;
 
-		public int X = 0;
-		public int Y = 0;
+		public virtual int X { get; set; } = 0;
+		public virtual int Y { get; set; } = 0;
 		
 		public GameObject()
 		{

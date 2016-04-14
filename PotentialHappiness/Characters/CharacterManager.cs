@@ -39,7 +39,7 @@ namespace PotentialHappiness.Characters
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
-			spriteBatch.Begin(transformMatrix: Camera.Instance.ScaleMatrix);
+			spriteBatch.Begin();
 			foreach (Character c in Characters)
 			{
 				c.Draw(spriteBatch);

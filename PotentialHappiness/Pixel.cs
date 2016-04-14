@@ -13,6 +13,9 @@ namespace PotentialHappiness
 		public Texture2D Texture => Screens.ScreenManager.Instance.Textures2D["Pixel"];
 		public Color Color { get; set; }
 
+		public int X;
+		public int Y;
+
 		public Pixel(Color color)
 		{
 			Color = color;
