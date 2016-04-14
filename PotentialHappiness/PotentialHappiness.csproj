@@ -55,6 +55,10 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AStar\AStarPathfinder.cs" />
+    <Compile Include="AStar\Map.cs" />
+    <Compile Include="AStar\NodePosition.cs" />
+    <Compile Include="AStar\TileMapAStar.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Characters\Character.cs" />
     <Compile Include="Characters\CharacterManager.cs" />
@@ -71,6 +75,7 @@
     <Compile Include="Map\Cells\MapCell.cs" />
     <Compile Include="Map\Generators\DungeonGenerator.cs" />
     <Compile Include="Map\Generators\MapGenerator.cs" />
+    <Compile Include="AStar\MapSearchNode.cs" />
     <Compile Include="Map\MapManager.cs" />
     <Compile Include="Map\MapRow.cs" />
     <Compile Include="Map\TileMap.cs" />
@@ -123,6 +128,7 @@
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
