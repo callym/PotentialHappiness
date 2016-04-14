@@ -10,7 +10,7 @@ namespace PotentialHappiness.Map.Generators
 {
 	public class MapGenerator
 	{
-		TileMap Map;
+		protected TileMap Map;
 		public virtual void Generate(TileMap map)
 		{
 			Map = map;

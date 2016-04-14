@@ -69,6 +69,7 @@
     <Compile Include="Interface\EditableTextBox.cs" />
     <Compile Include="Interface\TextBox.cs" />
     <Compile Include="Map\Cells\MapCell.cs" />
+    <Compile Include="Map\Generators\DungeonGenerator.cs" />
     <Compile Include="Map\Generators\MapGenerator.cs" />
     <Compile Include="Map\MapManager.cs" />
     <Compile Include="Map\MapRow.cs" />

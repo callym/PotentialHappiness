@@ -30,7 +30,7 @@ namespace PotentialHappiness.Map
 				Rows.Add(thisRow);
 			}
 
-			MapGenerator generator = new MapGenerator();
+			MapGenerator generator = new DungeonGenerator();
 			generator.Generate(this);
 
 			MapManager.Instance.Maps.Add(this);
