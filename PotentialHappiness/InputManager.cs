@@ -23,6 +23,9 @@ namespace PotentialHappiness
 		HashSet<InputComponent> componentsToRemove;
 		KeyboardState previousState;
 
+		public int RepeatTime = 100;
+		int previousTime = 0;
+
 		private InputManager()
 		{
 			InputComponents = new HashSet<InputComponent>();
@@ -47,16 +50,25 @@ namespace PotentialHappiness
 			Keys[] currentPressed = currentState.GetPressedKeys();
 			Keys[] previousPressed = previousState.GetPressedKeys();
 
-			foreach (Keys k in currentPressed.Intersect(previousPressed))
+			if (previousTime == 0)
 			{
-				// still pressed
-				foreach (InputComponent i in InputComponents)
+				previousTime = gameTime.TotalGameTime.Milliseconds;
+			}
+
+			if (Math.Abs(gameTime.TotalGameTime.Milliseconds - previousTime) > RepeatTime)
+			{
+				foreach (Keys k in currentPressed.Intersect(previousPressed))
 				{
-					if (i.Enabled && i.KeysHeld.ContainsKey(k))
+					// still pressed
+					foreach (InputComponent i in InputComponents)
 					{
-						i.KeysHeld[k].Invoke(this, EventArgs.Empty);
+						if (i.Enabled && i.KeysHeld.ContainsKey(k))
+						{
+							i.KeysHeld[k].Invoke(this, EventArgs.Empty);
+						}
 					}
 				}
+				previousTime = gameTime.TotalGameTime.Milliseconds;
 			}
 
 			foreach (Keys k in currentPressed.Except(previousPressed))

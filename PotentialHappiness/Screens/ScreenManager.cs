@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using static PotentialHappiness.Extensions.GraphicsExtensions;
 
 namespace PotentialHappiness.Screens
 {
@@ -162,6 +163,12 @@ namespace PotentialHappiness.Screens
 			GraphicsDevice.Clear(Color.White);
 			SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
 			VirtualScreen.Draw(SpriteBatch);
+			Color lineColor = Color.Gray;
+			for (int i = 0; i <= ScreenSize; i = i + (ScreenSize / VirtualScreen.VirtualWidth))
+			{
+				SpriteBatch.DrawLine(new Vector2(0, i), new Vector2(ScreenSize, i), lineColor);
+				SpriteBatch.DrawLine(new Vector2(i, 0), new Vector2(i, ScreenSize), lineColor);
+			}
 			SpriteBatch.End();
 
 			base.Draw(gameTime);

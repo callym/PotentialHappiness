@@ -142,5 +142,28 @@ namespace PotentialHappiness.Extensions
 
 			return color;
 		}
+
+		public static void DrawLine(this SpriteBatch sb, Vector2 start, Vector2 end, Color color)
+		{
+			Vector2 edge = end - start;
+			// calculate angle to rotate line
+			float angle =
+				(float)Math.Atan2(edge.Y, edge.X);
+
+
+			sb.Draw(Screens.ScreenManager.Instance.Textures2D["Pixel"],
+				new Rectangle(// rectangle defines shape of line and position of start of line
+					(int)start.X,
+					(int)start.Y,
+					(int)edge.Length(), //sb will strech the texture to fill this rectangle
+					1), //width of line, change this to make thicker line
+				null,
+				color, //colour of line
+				angle,     //angle of line (calulated above)
+				new Vector2(0, 0), // point in line about which to rotate
+				SpriteEffects.None,
+				0);
+
+		}
 	}
 }
