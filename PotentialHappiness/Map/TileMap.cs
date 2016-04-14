@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PotentialHappiness.Screens;
 using PotentialHappiness.Map.Cells;
+using PotentialHappiness.Map.Generators;
 
 namespace PotentialHappiness.Map
 {
@@ -15,8 +16,6 @@ namespace PotentialHappiness.Map
 		public List<MapRow> Rows = new List<MapRow>();
 		public int MapWidth = 64;
 		public int MapHeight = 64;
-
-		Random r = new Random();
 
 		public TileMap()
 		{
@@ -31,7 +30,8 @@ namespace PotentialHappiness.Map
 				Rows.Add(thisRow);
 			}
 
-			GenerateDungeon();
+			MapGenerator generator = new MapGenerator();
+			generator.Generate(this);
 
 			MapManager.Instance.Maps.Add(this);
 		}
@@ -99,66 +99,5 @@ namespace PotentialHappiness.Map
 				}
 			}
 		}
-
-		void GenerateDungeon()
-		{
-			MarkAllUnvisited();
-
-			//GenerateRooms();
-
-			ForEach((c) => c.Pixel.Color = c.Visited ? Color.White : Color.Black);
-		}
-
-		void GenerateRooms()
-		{
-			int numberOfTries = r.Next(5, 10);
-			
-			for (int i = 0; i < numberOfTries; i++)
-			{
-				int width = r.Next(15, 45);
-				int height = r.Next(15, 45);
-
-				int x = r.Next(1, MapWidth - width - 1);
-				int y = r.Next(1, MapHeight - height - 1);
-
-				ForEach((c) =>
-				{
-					if (c.X > (x) && c.X < (x + width) &&
-						c.Y > (y) && c.Y < (y + height))
-					{
-						c.Visited = true;
-					}
-				});
-			}
-		}
-
-		List<MapCell> GetAdjacentCells(MapCell cell)
-		{
-			List<MapCell> cells = new List<MapCell>();
-
-			int x = cell.X;
-			int y = cell.Y;
-
-			if (IsInMap(this[x + 1, y]))
-			{
-				cells.Add(this[x + 1, y]);
-			}
-			if (IsInMap(this[x - 1, y]))
-			{
-				cells.Add(this[x - 1, y]);
-			}
-			if (IsInMap(this[x, y + 1]))
-			{
-				cells.Add(this[x, y + 1]);
-			}
-			if (IsInMap(this[x, y - 1]))
-			{
-				cells.Add(this[x, y - 1]);
-			}
-
-			return cells;
-		}
-
-		void MarkAllUnvisited() => ForEach((c) => c.Visited = false);
 	}
 }
