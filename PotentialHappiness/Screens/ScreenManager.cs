@@ -129,7 +129,7 @@ namespace PotentialHappiness.Screens
 			}
 			catch (Exception e)
 			{
-				throw e;
+				throw;
 			}
 			finally
 			{
