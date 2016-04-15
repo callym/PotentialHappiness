@@ -163,12 +163,15 @@ namespace PotentialHappiness.Screens
 			GraphicsDevice.Clear(Color.White);
 			SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
 			VirtualScreen.Draw(SpriteBatch);
+
+#if DEBUG_GRID
 			Color lineColor = Color.Gray;
 			for (int i = 0; i <= ScreenSize; i = i + (ScreenSize / VirtualScreen.VirtualWidth))
 			{
 				SpriteBatch.DrawLine(new Vector2(0, i), new Vector2(ScreenSize, i), lineColor);
 				SpriteBatch.DrawLine(new Vector2(i, 0), new Vector2(i, ScreenSize), lineColor);
 			}
+#endif
 			SpriteBatch.End();
 
 			base.Draw(gameTime);

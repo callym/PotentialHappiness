@@ -10,7 +10,7 @@ namespace PotentialHappiness
 	/// </summary>
 	public static class Program
 	{
-#if DEBUG
+#if DEBUG_CONSOLE
 		[DllImport("kernel32")]
 		static extern bool AllocConsole();
 #endif
@@ -20,7 +20,7 @@ namespace PotentialHappiness
 		[STAThread]
 		static void Main()
 		{
-#if DEBUG
+#if DEBUG_CONSOLE
 			AllocConsole();
 #endif
 			Log("*** Potential Happiness ***");
@@ -33,7 +33,7 @@ namespace PotentialHappiness
 
 		public static void Log(string str)
 		{
-#if DEBUG
+#if DEBUG_CONSOLE
 			Console.WriteLine(str);
 #endif
 		}
