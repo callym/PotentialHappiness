@@ -33,7 +33,9 @@ namespace PotentialHappiness.AStar
 			double Y = (double)position.y - (double)nodeGoal.position.y;
 
 			// pythagoras theorem
-			return (float)Math.Sqrt((X * X) + (Y * Y));
+			//return (float)Math.Sqrt((X * X) + (Y * Y));
+			// manhattan distance
+			return (float)(X + Y);
 		}
 
 		public bool IsGoal(MapSearchNode nodeGoal)

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using PotentialHappiness.Map;
+using PotentialHappiness.Map.Areas;
 
 namespace PotentialHappiness.AStar
 {
@@ -23,20 +24,22 @@ namespace PotentialHappiness.AStar
 			
 			for (int i = 0; i < mapArray.Count(); i++)
 			{
-				mapArray[i] = 6;
+				mapArray[i] = 1;
 			}
 
 			map.ForEach((c) =>
 			{
-				Color t = c.Pixel.Color;
-
-				if (t == Color.Beige)
+				if (c.Feature is Corridor)
 				{
 					SetMap(c.X, c.Y, 1);
 				}
-				else if (t != Color.Black)
+				else if (c.Feature is Room)
 				{
-					SetMap(c.X, c.Y, 3);
+					SetMap(c.X, c.Y, 1);
+				}
+				else if (c.Feature == null)
+				{
+					SetMap(c.X, c.Y, 4);
 				}
 			});
 		}
