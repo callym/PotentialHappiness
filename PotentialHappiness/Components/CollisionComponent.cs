@@ -34,7 +34,7 @@ namespace PotentialHappiness.Components
 				{
 					if (e.Key == cell.Type)
 					{
-						e.Value.Invoke(cell, EventArgs.Empty);
+						e.Value?.Invoke(cell, EventArgs.Empty);
 					}
 				}
 			}
@@ -44,7 +44,7 @@ namespace PotentialHappiness.Components
 				{
 					if (collideWith.GetType().IsAssignableFrom(e.Key))
 					{
-						e.Value.Invoke(collideWith, EventArgs.Empty);
+						e.Value?.Invoke(collideWith, EventArgs.Empty);
 					}
 				}
 			}

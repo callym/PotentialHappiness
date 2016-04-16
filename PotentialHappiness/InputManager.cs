@@ -64,7 +64,7 @@ namespace PotentialHappiness
 					{
 						if (i.Enabled && i.KeysHeld.ContainsKey(k))
 						{
-							i.KeysHeld[k].Invoke(this, EventArgs.Empty);
+							i.KeysHeld[k]?.Invoke(this, EventArgs.Empty);
 						}
 					}
 				}
@@ -78,7 +78,7 @@ namespace PotentialHappiness
 				{
 					if (i.Enabled && i.KeysPressed.ContainsKey(k))
 					{
-						i.KeysPressed[k].Invoke(this, EventArgs.Empty);
+						i.KeysPressed[k]?.Invoke(this, EventArgs.Empty);
 					}
 				}
 			}
@@ -90,7 +90,7 @@ namespace PotentialHappiness
 				{
 					if (i.Enabled && i.KeysReleased.ContainsKey(k))
 					{
-						i.KeysReleased[k].Invoke(this, EventArgs.Empty);
+						i.KeysReleased[k]?.Invoke(this, EventArgs.Empty);
 					}
 				}
 			}

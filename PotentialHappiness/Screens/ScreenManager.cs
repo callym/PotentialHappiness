@@ -92,49 +92,40 @@ namespace PotentialHappiness.Screens
 
 		protected override void Update(GameTime gameTime)
 		{
-			try
+			if (Keyboard.GetState().IsKeyDown(Keys.Escape))
 			{
-				if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+				Exit();
+			}
+
+			if (ScreenList.Count > 0)
+			{
+				int startIndex = ScreenList.Count - 1;
+				while (ScreenList[startIndex].IsPopup
+						&& ScreenList[startIndex].IsActive)
 				{
-					Exit();
+					startIndex--;
 				}
 
-				if (ScreenList.Count > 0)
+				for (int i = startIndex; i < ScreenList.Count; i++)
 				{
-					int startIndex = ScreenList.Count - 1;
-					while (ScreenList[startIndex].IsPopup
-							&& ScreenList[startIndex].IsActive)
-					{
-						startIndex--;
-					}
-
-					for (int i = startIndex; i < ScreenList.Count; i++)
-					{
-						ScreenList[i].Update(gameTime);
-					}
+					ScreenList[i].Update(gameTime);
 				}
-
-				screensToAdd.ForEach(s =>
-				{
-					s.LoadAssets();
-					ScreenList.Add(s);
-				});
-				screensToAdd.Clear();
-
-				screensToRemove.ForEach(s => s.UnloadAssets());
-				ScreenList.RemoveAll(s => screensToRemove.Contains(s));
-				screensToRemove.Clear();
-
-				VirtualScreen.Update();
 			}
-			catch (Exception e)
+
+			screensToAdd.ForEach(s =>
 			{
-				throw;
-			}
-			finally
-			{
-				base.Update(gameTime);
-			}
+				s.LoadAssets();
+				ScreenList.Add(s);
+			});
+			screensToAdd.Clear();
+
+			screensToRemove.ForEach(s => s.UnloadAssets());
+			ScreenList.RemoveAll(s => screensToRemove.Contains(s));
+			screensToRemove.Clear();
+
+			VirtualScreen.Update();
+
+			base.Update(gameTime);
 		}
 
 		protected override void Draw(GameTime gameTime)
