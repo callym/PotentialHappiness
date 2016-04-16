@@ -27,10 +27,14 @@ namespace PotentialHappiness.Extensions
 				string[] lines = text.Split(NewLines, StringSplitOptions.None);
 				for (int i = 0; i < lines.Length; i++)
 				{
-					bounds.Y = (font.LineSpacing * i);
 					if (align == Alignment.Center)
 					{
+						bounds.Y = (font.LineSpacing * i);
 						bounds.Y -= ((font.LineSpacing / 2) * (lines.Length - 1));
+					}
+					else
+					{
+						bounds.Y += (font.LineSpacing * i);
 					}
 					spriteBatch.DrawString(font, lines[i], bounds, align, color);
 				}
@@ -113,6 +117,19 @@ namespace PotentialHappiness.Extensions
 			return sb.ToString();
 		}
 
+		public static void DrawRectangle(this SpriteBatch sb, Rectangle rectangle, Color color, bool fill, Color? fillColor = null)
+		{
+			Texture2D t = Screens.ScreenManager.Instance.PixelTexture;
+			if (fill)
+			{
+				sb.Draw(t, rectangle, fillColor ?? color);
+			}
+			sb.Draw(t, new Rectangle(rectangle.Left, rectangle.Top, rectangle.Width, 1), color);
+			sb.Draw(t, new Rectangle(rectangle.Left, rectangle.Bottom, rectangle.Width, 1), color);
+			sb.Draw(t, new Rectangle(rectangle.Left, rectangle.Top, 1, rectangle.Height), color);
+			sb.Draw(t, new Rectangle(rectangle.Right, rectangle.Top, 1, rectangle.Height + 1), color);
+		}
+
 		public enum ColorTypes
 		{
 			Pastel
@@ -164,6 +181,11 @@ namespace PotentialHappiness.Extensions
 				SpriteEffects.None,
 				0);
 
+		}
+
+		public static Color ToAlpha(this Color c, float a)
+		{
+			return c * a;
 		}
 	}
 }

@@ -78,6 +78,7 @@
     <Compile Include="InputManager.cs" />
     <Compile Include="Interface\EditableTextBox.cs" />
     <Compile Include="Interface\InterfaceObject.cs" />
+    <Compile Include="Interface\PopupTextBox.cs" />
     <Compile Include="Interface\TextBox.cs" />
     <Compile Include="Map\Areas\Corridor.cs" />
     <Compile Include="Map\Areas\Feature.cs" />

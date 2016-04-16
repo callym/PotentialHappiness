@@ -39,6 +39,10 @@ namespace PotentialHappiness.Screens
 			ic.AddEvent(Keys.Enter, Input.Pressed, (o, e) =>
 			{
 				MapScreen map = new MapScreen();
+
+				PopupTextBox ptb = new PopupTextBox(map);
+				ptb.Text = "blap\nblap";
+
 				PlayableCharacter player = new PlayableCharacter(nameText.Text, Color.Cyan, MapManager.Instance.CurrentMap);
 				Room startingRoom = (Room)MapManager.Instance.CurrentMap.Features.Find((f) =>
 				{
