@@ -37,22 +37,22 @@ namespace PotentialHappiness.Components
 
 		public void OnCollide(GameObject collideWith)
 		{
-			if (collideWith is MapCell)
+			if (!collidedWithThisUpdate.Contains(collideWith))
 			{
-				MapCell cell = collideWith as MapCell;
-				foreach (KeyValuePair<CellType, EventHandler> e in CellCollide)
+				collidedWithThisUpdate.Add(collideWith);
+				if (collideWith is MapCell)
 				{
-					if (e.Key == cell.Type)
+					MapCell cell = collideWith as MapCell;
+					foreach (KeyValuePair<CellType, EventHandler> e in CellCollide)
 					{
-						e.Value?.Invoke(cell, EventArgs.Empty);
+						if (e.Key == cell.Type)
+						{
+							e.Value?.Invoke(cell, EventArgs.Empty);
+						}
 					}
 				}
-			}
-			else
-			{
-				if (!collidedWithThisUpdate.Contains(collideWith))
+				else
 				{
-					collidedWithThisUpdate.Add(collideWith);
 					foreach (KeyValuePair<Type, EventHandler> e in ObjectCollide)
 					{
 						if (e.Key.IsAssignableFrom(collideWith.GetType()))
