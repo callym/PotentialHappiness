@@ -14,11 +14,11 @@ namespace PotentialHappiness.Screens
 		public bool IsActive = true;
 		public bool IsPopup = false;
 		public Color BackgroundColor = Color.Black;
-		public List<GameObject> GameObjects;
+		public GameList<GameObject> GameObjects;
 
 		public GameScreen()
 		{
-			GameObjects = new List<GameObject>();
+			GameObjects = new GameList<GameObject>();
 		}
 
 		public virtual void LoadAssets()
@@ -36,10 +36,7 @@ namespace PotentialHappiness.Screens
 			InputManager.Instance.Update(gameTime);
 			GameObjects.ForEach(go =>
 			{
-				if (go.Enabled)
-				{
-					go.Update(gameTime);
-				}
+				go.Update(gameTime);
 			});
 		}
 

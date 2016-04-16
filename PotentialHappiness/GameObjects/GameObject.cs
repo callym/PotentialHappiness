@@ -14,6 +14,7 @@ namespace PotentialHappiness.GameObjects
 		public GameList<Component> Components;
 
 		bool _enabled = true;
+		bool? _changeEnabled = null;
 		public EventHandler OnEnable;
 		public EventHandler OnDisable;
 		public bool Enabled
@@ -24,14 +25,22 @@ namespace PotentialHappiness.GameObjects
 			}
 			set
 			{
-				_enabled = value;
-				if (_enabled)
+				if (!_changeEnabled.HasValue)
 				{
-					OnEnable.Invoke(this, EventArgs.Empty);
-				}
+					_changeEnabled = value;
+}
 				else
 				{
-					OnDisable.Invoke(this, EventArgs.Empty);
+					_enabled = value;
+					Components.ForEach((c) => c.Enabled = value);
+					if (_enabled)
+					{
+						OnEnable?.Invoke(this, EventArgs.Empty);
+					}
+					else
+					{
+						OnDisable?.Invoke(this, EventArgs.Empty);
+					}
 				}
 			}
 		}
@@ -64,13 +73,25 @@ namespace PotentialHappiness.GameObjects
 
 		public virtual void Update(GameTime gameTime)
 		{
-			Components.ForEach(c =>
+			if (_changeEnabled.HasValue)
 			{
-				if (c.Enabled)
+				if (Enabled != _changeEnabled.Value)
 				{
-					c.Update(gameTime);
+					Enabled = _changeEnabled.Value;
+					_changeEnabled = null;
 				}
-			});
+			}
+
+			if (Enabled)
+			{
+				Components.ForEach(c =>
+				{
+					if (c.Enabled)
+					{
+						c.Update(gameTime);
+					}
+				});
+			}
 
 			if (unload)
 			{
