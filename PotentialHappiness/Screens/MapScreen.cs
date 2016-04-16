@@ -13,7 +13,7 @@ namespace PotentialHappiness.Screens
 	{
 		public MapScreen() : base()
 		{
-			MapManager.Instance.CurrentMap = new TileMap();
+			MapManager.Instance.CurrentMap = new TileMap(this);
 		}
 
 		public override void Update(GameTime gameTime)

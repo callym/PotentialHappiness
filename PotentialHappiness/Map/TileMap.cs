@@ -15,6 +15,7 @@ namespace PotentialHappiness.Map
 {
 	public class TileMap
 	{
+		public GameScreen Screen;
 		public List<MapRow> Rows = new List<MapRow>();
 		public int MapWidth = 64;
 		public int MapHeight = 64;
@@ -22,8 +23,9 @@ namespace PotentialHappiness.Map
 		public GameList<Feature> Features = new GameList<Feature>();
 		public GameList<GameObject> GameObjects = new GameList<GameObject>();
 
-		public TileMap()
+		public TileMap(GameScreen screen)
 		{
+			Screen = screen;
 			for (int y = 0; y < MapHeight; y++)
 			{
 				MapRow thisRow = new MapRow();

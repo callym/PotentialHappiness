@@ -66,6 +66,7 @@ namespace PotentialHappiness.Characters
 					new Vector2(0, 64 - ScreenManager.Instance.Font.LineSpacing),
 					Color.Magenta);
 			};
+			health.OnMinLevel += (o, e) => ScreenManager.Instance.ChangeScreens(MapManager.Instance.CurrentMap.Screen, new EndGameScreen());
 
 			base.Init();
 		}

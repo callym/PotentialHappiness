@@ -18,8 +18,6 @@ namespace PotentialHappiness.Screens
 		public Texture2D PixelTexture;
 		public SpriteFont Font;
 		public GameList<GameScreen> ScreenList;
-//		List<GameScreen> screensToAdd;
-//		List<GameScreen> screensToRemove;
 		public ContentManager ContentManager;
 		public VirtualScreen VirtualScreen;
 
