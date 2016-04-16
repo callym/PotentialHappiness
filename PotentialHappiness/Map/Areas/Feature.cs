@@ -47,12 +47,20 @@ namespace PotentialHappiness.Map.Areas
 
 		public void Add(MapCell cell, CellType type)
 		{
-			if ((cell.Feature?.Priority ?? 0) < this.Priority)
+			bool add = true;
+			if (cell.Feature != null)
+			{
+				if (cell.Feature.Priority > this.Priority)
+				{
+					add = false;
+				}
+			}
+			if (add)
 			{
 				cell.Feature = this;
 				cell.Type = type;
+				_cells.Add(cell);
 			}
-			Cells.Add(cell);
 		}
 
 		public void Add(List<MapCell> cells, CellType type)

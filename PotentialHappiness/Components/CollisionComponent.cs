@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 using PotentialHappiness.GameObjects;
 using PotentialHappiness.Map.Cells;
 
@@ -16,6 +17,8 @@ namespace PotentialHappiness.Components
 		public List<CellType> CellBlockMovement;
 		public List<Type> ObjectBlockMovement;
 
+		HashSet<GameObject> collidedWithThisUpdate = new HashSet<GameObject>();
+
 		public CollisionComponent(GameObject parent) : base(parent)
 		{
 			CellCollide = new Dictionary<CellType, EventHandler>();
@@ -25,7 +28,14 @@ namespace PotentialHappiness.Components
 			ObjectBlockMovement = new List<Type>();
 		}
 
-		public void OnCollide(MapObject collideWith)
+		public override void Update(GameTime gameTime)
+		{
+			collidedWithThisUpdate.Clear();
+
+			base.Update(gameTime);
+		}
+
+		public void OnCollide(GameObject collideWith)
 		{
 			if (collideWith is MapCell)
 			{
@@ -40,12 +50,22 @@ namespace PotentialHappiness.Components
 			}
 			else
 			{
-				foreach (KeyValuePair<Type, EventHandler> e in ObjectCollide)
+				if (!collidedWithThisUpdate.Contains(collideWith))
 				{
-					if (collideWith.GetType().IsAssignableFrom(e.Key))
+					collidedWithThisUpdate.Add(collideWith);
+					foreach (KeyValuePair<Type, EventHandler> e in ObjectCollide)
 					{
-						e.Value?.Invoke(collideWith, EventArgs.Empty);
+						if (e.Key.IsAssignableFrom(collideWith.GetType()))
+						{
+							e.Value?.Invoke(collideWith, EventArgs.Empty);
+						}
 					}
+
+					collideWith.GetComponents(typeof(CollisionComponent)).ForEach((comp) =>
+					{
+						CollisionComponent c = comp as CollisionComponent;
+						c.OnCollide(this.Parent);
+					});
 				}
 			}
 		}

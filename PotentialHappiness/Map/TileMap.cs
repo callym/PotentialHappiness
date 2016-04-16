@@ -21,6 +21,8 @@ namespace PotentialHappiness.Map
 
 		public List<Feature> Features = new List<Feature>();
 		public List<GameObject> GameObjects = new List<GameObject>();
+		public List<GameObject> GameObjectsToAdd = new List<GameObject>();
+		public List<GameObject> GameObjectsToRemove = new List<GameObject>();
 
 		public TileMap()
 		{
@@ -76,7 +78,15 @@ namespace PotentialHappiness.Map
 
 		public void Update(GameTime gameTime)
 		{
+			GameObjects.AddRange(GameObjectsToAdd);
+			GameObjectsToRemove.ForEach((o) => GameObjects.Remove(o));
+			GameObjectsToAdd.Clear();
+			GameObjectsToRemove.Clear();
 
+			GameObjects.ForEach((o) =>
+			{
+				o.Update(gameTime);
+			});
 		}
 
 		public void Draw(SpriteBatch spriteBatch)
@@ -87,6 +97,17 @@ namespace PotentialHappiness.Map
 				if (IsVisible(c.Pixel.X, c.Pixel.Y))
 				{
 					c.Draw(spriteBatch);
+				}
+			});
+			GameObjects.ForEach((o) =>
+			{
+				if (o is PixelGameObject)
+				{
+					PixelGameObject p = o as PixelGameObject;
+					if (IsVisible(p.Pixel.X, p.Pixel.Y))
+					{
+						p.Draw(spriteBatch);
+					}
 				}
 			});
 			spriteBatch.End();

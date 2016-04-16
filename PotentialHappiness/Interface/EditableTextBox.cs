@@ -31,7 +31,7 @@ namespace PotentialHappiness.Interface
 
 		private void CalculateMaxLength()
 		{
-			SpriteFont font = ScreenManager.Instance.Fonts[Font];
+			SpriteFont font = ScreenManager.Instance.Font;
 			int i = 0;
 			// '@' is the widest character
 			while (font.MeasureString(new string('@', i)).X < Area.Width)
@@ -94,7 +94,7 @@ namespace PotentialHappiness.Interface
 				fullText += "_";
 			}
 			fullText = fullText.ToUpper();
-			ScreenManager.Instance.SpriteBatch.DrawString(ScreenManager.Instance.Fonts[Font],
+			ScreenManager.Instance.SpriteBatch.DrawString(ScreenManager.Instance.Font,
 															fullText,
 															Area,
 															Alignment,

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using PotentialHappiness.AStar;
+using PotentialHappiness.GameObjects;
 using PotentialHappiness.Map.Areas;
 using PotentialHappiness.Map.Cells;
 using static PotentialHappiness.Extensions.LINQExtensions;
@@ -24,6 +25,8 @@ namespace PotentialHappiness.Map.Generators
 			base.Generate(map);
 
 			GenerateRooms();
+
+			GenerateGems();
 
 			GenerateCorridors();
 
@@ -57,6 +60,29 @@ namespace PotentialHappiness.Map.Generators
 			List<Room> doneRooms = new List<Room>();
 			rooms.ForEach((r) => CreateCorridor(r, doneRooms));
 			rooms.ForEach((r) => CreateCorridor(r));
+		}
+
+		void GenerateGems()
+		{
+			int maxTotal = 100;
+			int maxRoom = maxTotal / rooms.Count;
+			int current = 0;
+			int currentRoom = 0;
+
+			rooms.ForEach((r) =>
+			{
+				//Program.Log(r.Cells.Count.ToString());
+				r.Cells.ForEach((c) =>
+				{
+					if (RandomManager.Instance.Next(100) < 10)
+					{
+						GemObject gem = new GemObject(Color.HotPink, c.X, c.Y, Map);
+						current++;
+						currentRoom++;
+						Program.Log($"Created Gem at ({c.X}, {c.Y})");
+					}
+				});
+			});
 		}
 
 		void CreateCorridor(Room r, List<Room> doneRooms = null)

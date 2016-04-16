@@ -10,7 +10,7 @@ namespace PotentialHappiness
 {
 	public class Pixel
 	{
-		public Texture2D Texture => Screens.ScreenManager.Instance.Textures2D["Pixel"];
+		public Texture2D Texture => Screens.ScreenManager.Instance.PixelTexture;
 		public Color Color { get; set; }
 
 		public int X;

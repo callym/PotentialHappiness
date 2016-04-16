@@ -27,7 +27,7 @@ namespace PotentialHappiness.Screens
 			GameObjects.Add(titleText);
 
 			EditableTextBox nameText = new EditableTextBox();
-			int spacing = ScreenManager.Instance.Fonts[nameText.Font].LineSpacing * 3;
+			int spacing = ScreenManager.Instance.Font.LineSpacing * 3;
 			Rectangle nameBox = ScreenManager.Instance.VirtualScreen.VirtualArea;
 			nameBox.Y += spacing;
 			nameBox.Height -= spacing;

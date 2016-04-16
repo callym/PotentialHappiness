@@ -9,9 +9,18 @@ namespace PotentialHappiness.GameObjects
 {
 	public class MapObject : GameObject
 	{
+		TileMap Map;
 		public MapObject(TileMap map) : base()
 		{
-			map.GameObjects.Add(this);
+			Map = map;
+			Map.GameObjectsToAdd.Add(this);
+		}
+
+		public override void Unload()
+		{
+			base.Unload();
+
+			Map.GameObjectsToRemove.Add(this);
 		}
 	}
 }

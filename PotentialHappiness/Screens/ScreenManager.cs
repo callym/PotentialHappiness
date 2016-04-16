@@ -15,8 +15,8 @@ namespace PotentialHappiness.Screens
 	{
 		public GraphicsDeviceManager GraphicsDeviceManager;
 		public SpriteBatch SpriteBatch;
-		public Dictionary<string, Texture2D> Textures2D;
-		public Dictionary<string, SpriteFont> Fonts;
+		public Texture2D PixelTexture;
+		public SpriteFont Font;
 		public List<GameScreen> ScreenList;
 		List<GameScreen> screensToAdd;
 		List<GameScreen> screensToRemove;
@@ -40,8 +40,6 @@ namespace PotentialHappiness.Screens
 
 		protected override void Initialize()
 		{
-			Textures2D = new Dictionary<string, Texture2D>();
-			Fonts = new Dictionary<string, SpriteFont>();
 			ScreenList = new List<GameScreen>();
 			screensToAdd = new List<GameScreen>();
 			screensToRemove = new List<GameScreen>();
@@ -65,14 +63,12 @@ namespace PotentialHappiness.Screens
 			SpriteBatch = new SpriteBatch(GraphicsDevice);
 
 			// Load any full-game assets here!
-			SpriteFont font = Content.Load<SpriteFont>("handy-font");
-			font.Spacing -= 2;
-			font.LineSpacing += 2;
-			AddFont("handy-font", font);
+			Font = Content.Load<SpriteFont>("handy-font");
+			Font.Spacing -= 2;
+			Font.LineSpacing += 2;
 
-			Texture2D pixelTexture = new Texture2D(GraphicsDevice, 1, 1);
-			pixelTexture.SetData(new Color[1] { Color.White });
-			Textures2D.Add("Pixel", pixelTexture);
+			PixelTexture = new Texture2D(GraphicsDevice, 1, 1);
+			PixelTexture.SetData(new Color[1] { Color.White });
 
 			AddScreen(new TitleScreen());
 
@@ -82,8 +78,6 @@ namespace PotentialHappiness.Screens
 		protected override void UnloadContent()
 		{
 			ScreenList.ForEach(s => s.UnloadAssets());
-			Textures2D.Clear();
-			Fonts.Clear();
 			ScreenList.Clear();
 			Content.Unload();
 
@@ -166,38 +160,6 @@ namespace PotentialHappiness.Screens
 			SpriteBatch.End();
 
 			base.Draw(gameTime);
-		}
-
-		public void AddFont(string fontName, SpriteFont font = null)
-		{
-			if (!Fonts.ContainsKey(fontName))
-			{
-				Fonts.Add(fontName, font ?? ContentManager.Load<SpriteFont>(fontName));
-			}
-		}
-
-		public void RemoveFont(string fontName)
-		{
-			if (Fonts.ContainsKey(fontName))
-			{
-				Fonts.Remove(fontName);
-			}
-		}
-
-		public void AddTexture2D(string textureName, Texture2D texture = null)
-		{
-			if (!Textures2D.ContainsKey(textureName))
-			{
-				Textures2D.Add(textureName, texture ?? ContentManager.Load<Texture2D>(textureName));
-			}
-		}
-
-		public void RemoveTexture2D(string textureName)
-		{
-			if (Fonts.ContainsKey(textureName))
-			{
-				Fonts.Remove(textureName);
-			}
 		}
 
 		public void AddScreen(GameScreen gameScreen)

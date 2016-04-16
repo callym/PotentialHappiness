@@ -70,6 +70,7 @@
     <Compile Include="Extensions\LINQExtensions.cs" />
     <Compile Include="GameObjects\GameObject.cs" />
     <Compile Include="Extensions\GraphicsExtensions.cs" />
+    <Compile Include="GameObjects\GemObject.cs" />
     <Compile Include="GameObjects\MapObject.cs" />
     <Compile Include="GameObjects\PixelGameObject.cs" />
     <Compile Include="InputManager.cs" />

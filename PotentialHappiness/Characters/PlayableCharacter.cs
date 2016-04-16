@@ -20,6 +20,10 @@ namespace PotentialHappiness.Characters
 
 		public PlayableCharacter(string name, Color playerColor, TileMap map) : base(name, playerColor, map)
 		{
+
+		}
+		protected override void Init()
+		{
 			InputComponent input = new InputComponent(this);
 			input.AddEvent(Keys.Left, Input.Held, (o, e) => { this.ChangePosition(-Speed, 0); });
 			input.AddEvent(Keys.Right, Input.Held, (o, e) => { this.ChangePosition(Speed, 0); });
@@ -45,7 +49,7 @@ namespace PotentialHappiness.Characters
 			{
 				SpriteBatch s = o as SpriteBatch;
 				s.DrawString(
-					ScreenManager.Instance.Fonts["handy-font"],
+					ScreenManager.Instance.Font,
 					Name,
 					Vector2.Zero,
 					Color.Magenta);
@@ -57,11 +61,13 @@ namespace PotentialHappiness.Characters
 			{
 				SpriteBatch s = o as SpriteBatch;
 				s.DrawString(
-					ScreenManager.Instance.Fonts["handy-font"],
+					ScreenManager.Instance.Font,
 					$"health: {health.CurrentLevel}",
-					new Vector2(0, 64 - ScreenManager.Instance.Fonts["handy-font"].LineSpacing),
+					new Vector2(0, 64 - ScreenManager.Instance.Font.LineSpacing),
 					Color.Magenta);
 			};
+
+			base.Init();
 		}
 
 		int RepeatTime = 50;

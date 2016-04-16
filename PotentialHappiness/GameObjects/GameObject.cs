@@ -42,12 +42,21 @@ namespace PotentialHappiness.GameObjects
 
 		public virtual int X { get; set; } = 0;
 		public virtual int Y { get; set; } = 0;
+
+		protected bool unload = false;
 		
 		public GameObject()
 		{
 			Components = new List<Component>();
 			componentsToAdd = new List<Component>();
 			componentsToRemove = new List<Component>();
+
+			Init();
+		}
+
+		protected virtual void Init()
+		{
+
 		}
 
 		public virtual void AddComponent(Component c) => componentsToAdd.Add(c);
@@ -74,6 +83,11 @@ namespace PotentialHappiness.GameObjects
 			componentsToRemove.ForEach(c => Components.Remove(c));
 			componentsToAdd.Clear();
 			componentsToRemove.Clear();
+
+			if (unload)
+			{
+				Unload();
+			}
 		}
 
 		/// <summary>

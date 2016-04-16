@@ -20,7 +20,6 @@ namespace PotentialHappiness.Screens
 		{
 			Camera.Instance.Update(gameTime);
 			MapManager.Instance.Update(gameTime);
-			CharacterManager.Instance.Update(gameTime);
 
 			base.Update(gameTime);
 		}
@@ -28,7 +27,6 @@ namespace PotentialHappiness.Screens
 		public override void Draw(GameTime gameTime)
 		{
 			MapManager.Instance.Draw(ScreenManager.Instance.SpriteBatch);
-			CharacterManager.Instance.Draw(ScreenManager.Instance.SpriteBatch);
 
 			base.Draw(gameTime);
 		}

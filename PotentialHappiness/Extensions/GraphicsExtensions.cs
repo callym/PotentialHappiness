@@ -151,7 +151,7 @@ namespace PotentialHappiness.Extensions
 				(float)Math.Atan2(edge.Y, edge.X);
 
 
-			sb.Draw(Screens.ScreenManager.Instance.Textures2D["Pixel"],
+			sb.Draw(Screens.ScreenManager.Instance.PixelTexture,
 				new Rectangle(// rectangle defines shape of line and position of start of line
 					(int)start.X,
 					(int)start.Y,
