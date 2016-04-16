@@ -17,10 +17,9 @@ namespace PotentialHappiness.Screens
 		{
 			BackgroundColor = Color.Black;
 
-			TextBox titleText = new TextBox();
+			TextBox titleText = new TextBox(this);
 			titleText.Area = ScreenManager.Instance.VirtualScreen.VirtualArea;
 			titleText.Text = "Potential\nHappiness";
-			GameObjects.Add(titleText);
 
 			GameObject input = new GameObject();
 			InputComponent ic = new InputComponent(input);

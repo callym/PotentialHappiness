@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using PotentialHappiness.Characters;
 using PotentialHappiness.Components;
@@ -20,20 +21,18 @@ namespace PotentialHappiness.Screens
 		{
 			BackgroundColor = Color.Black;
 
-			TextBox titleText = new TextBox();
+			TextBox titleText = new TextBox(this);
 			titleText.Area = ScreenManager.Instance.VirtualScreen.VirtualArea;
 			titleText.Text = "What is your name?";
 			titleText.Alignment = Extensions.GraphicsExtensions.Alignment.Top;
-			GameObjects.Add(titleText);
 
-			EditableTextBox nameText = new EditableTextBox();
+			EditableTextBox nameText = new EditableTextBox(this);
 			int spacing = ScreenManager.Instance.Font.LineSpacing * 3;
 			Rectangle nameBox = ScreenManager.Instance.VirtualScreen.VirtualArea;
 			nameBox.Y += spacing;
 			nameBox.Height -= spacing;
 			nameText.Area = nameBox;
 			nameText.Text = "callym";
-			GameObjects.Add(nameText);
 
 			GameObject input = new GameObject();
 			InputComponent ic = new InputComponent(input);

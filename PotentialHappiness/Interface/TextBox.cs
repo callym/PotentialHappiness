@@ -18,12 +18,12 @@ namespace PotentialHappiness.Interface
 		public Color Color { get; set; } = Color.White;
 		public GraphicsExtensions.Alignment Alignment { get; set; } = GraphicsExtensions.Alignment.Center;
 
-		public TextBox() : base()
+		public TextBox(GameScreen screen) : base(screen)
 		{
 
 		}
 
-		public TextBox(string text) : this()
+		public TextBox(string text, GameScreen screen) : this(screen)
 		{
 			Text = text;
 		}

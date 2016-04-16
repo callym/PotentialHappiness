@@ -17,14 +17,14 @@ namespace PotentialHappiness.Interface
 		KeyboardState _prevKeyState;
 		int maxLength = -1;
 
-		public EditableTextBox() : base()
+		public EditableTextBox(GameScreen screen) : base(screen)
 		{
 			ScreenManager.Instance.Window.TextInput += TextEntered;
 			onTextEntered += HandleInput;
 			OnEnable += (e, o) => CalculateMaxLength();
 		}
 
-		public EditableTextBox(string text) : this()
+		public EditableTextBox(string text, GameScreen screen) : this(screen)
 		{
 			Text = text;
 		}
