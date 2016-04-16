@@ -54,7 +54,7 @@ namespace PotentialHappiness.GameObjects
 
 		public virtual void RemoveComponent(Component c) => componentsToRemove.Add(c);
 
-		public virtual List<Component> GetComponents(Type t) => Components.FindAll((c) => c.GetType().IsAssignableFrom(t));
+		public virtual List<Component> GetComponents(Type t) => Components.FindAll((c) => t.IsAssignableFrom(c.GetType()));
 
 		public virtual void Unload()
 		{
@@ -82,7 +82,7 @@ namespace PotentialHappiness.GameObjects
 		/// <param name="spriteBatch">The current spriteBatch (after it's begun)</param>
 		public virtual void Draw(SpriteBatch spriteBatch)
 		{
-
+			Components.ForEach((c) => c.Draw(spriteBatch));
 		}
 	}
 }
