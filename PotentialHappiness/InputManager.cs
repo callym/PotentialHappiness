@@ -18,9 +18,7 @@ namespace PotentialHappiness
 
 	public sealed class InputManager
 	{
-		public HashSet<InputComponent> InputComponents;
-		HashSet<InputComponent> componentsToAdd;
-		HashSet<InputComponent> componentsToRemove;
+		public GameList<InputComponent> InputComponents;
 		KeyboardState previousState;
 
 		public int RepeatTime = 100;
@@ -28,20 +26,8 @@ namespace PotentialHappiness
 
 		private InputManager()
 		{
-			InputComponents = new HashSet<InputComponent>();
-			componentsToAdd = new HashSet<InputComponent>();
-			componentsToRemove = new HashSet<InputComponent>();
+			InputComponents = new GameList<InputComponent>();
 			previousState = Keyboard.GetState();
-		}
-
-		public void AddComponent(InputComponent inputComponent)
-		{
-			componentsToAdd.Add(inputComponent);
-		}
-
-		public void RemoveComponent(InputComponent inputComponent)
-		{
-			componentsToRemove.Add(inputComponent);
 		}
 
 		public void Update(GameTime gameTime)
@@ -62,7 +48,7 @@ namespace PotentialHappiness
 					// still pressed
 					foreach (InputComponent i in InputComponents)
 					{
-						if (i.Enabled && i.KeysHeld.ContainsKey(k))
+						if (i.Enabled && i.Parent.Enabled && i.KeysHeld.ContainsKey(k))
 						{
 							i.KeysHeld[k]?.Invoke(this, EventArgs.Empty);
 						}
@@ -76,7 +62,7 @@ namespace PotentialHappiness
 				// new pressed
 				foreach (InputComponent i in InputComponents)
 				{
-					if (i.Enabled && i.KeysPressed.ContainsKey(k))
+					if (i.Enabled && i.Parent.Enabled && i.KeysPressed.ContainsKey(k))
 					{
 						i.KeysPressed[k]?.Invoke(this, EventArgs.Empty);
 					}
@@ -88,7 +74,7 @@ namespace PotentialHappiness
 				// new released
 				foreach (InputComponent i in InputComponents)
 				{
-					if (i.Enabled && i.KeysReleased.ContainsKey(k))
+					if (i.Enabled && i.Parent.Enabled && i.KeysReleased.ContainsKey(k))
 					{
 						i.KeysReleased[k]?.Invoke(this, EventArgs.Empty);
 					}
@@ -96,18 +82,6 @@ namespace PotentialHappiness
 			}
 
 			previousState = currentState;
-
-			foreach (InputComponent i in componentsToAdd)
-			{
-				InputComponents.Add(i);
-			}
-			componentsToAdd.Clear();
-
-			foreach (InputComponent i in componentsToRemove)
-			{
-				InputComponents.Remove(i);
-			}
-			componentsToRemove.Clear();
 		}
 
 		private static readonly Lazy<InputManager> lazy = new Lazy<InputManager>(() => new InputManager());

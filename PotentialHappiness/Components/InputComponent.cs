@@ -21,12 +21,12 @@ namespace PotentialHappiness.Components
 			KeysPressed = new Dictionary<Keys, EventHandler>();
 			KeysReleased = new Dictionary<Keys, EventHandler>();
 
-			InputManager.Instance.AddComponent(this);
+			InputManager.Instance.InputComponents.Add(this);
 		}
 
 		public override void Unload()
 		{
-			InputManager.Instance.RemoveComponent(this);
+			InputManager.Instance.InputComponents.Remove(this);
 
 			base.Unload();
 		}
