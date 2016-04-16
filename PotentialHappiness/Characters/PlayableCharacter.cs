@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using PotentialHappiness.Components;
+using PotentialHappiness.GameObjects;
 using PotentialHappiness.Map;
 
 namespace PotentialHappiness.Characters
@@ -15,13 +16,16 @@ namespace PotentialHappiness.Characters
 		int moving = 0;
 		Directions movingDirection;
 
-		public PlayableCharacter(string name, Color playerColor) : base(name, playerColor)
+		public PlayableCharacter(string name, Color playerColor, TileMap map) : base(name, playerColor, map)
 		{
 			InputComponent input = new InputComponent(this);
 			input.AddEvent(Keys.Left, Input.Held, (o, e) => { this.ChangePosition(-Speed, 0); });
 			input.AddEvent(Keys.Right, Input.Held, (o, e) => { this.ChangePosition(Speed, 0); });
 			input.AddEvent(Keys.Up, Input.Held, (o, e) => { this.ChangePosition(0, -Speed); });
 			input.AddEvent(Keys.Down, Input.Held, (o, e) => { this.ChangePosition(0, Speed); });
+
+			CollisionComponent collision = new CollisionComponent(this);
+			collision.AddEvent(Map.Cells.CellType.Wall, true, (o, e) => Program.Log("Collided"));
 		}
 
 		int RepeatTime = 50;
@@ -68,30 +72,71 @@ namespace PotentialHappiness.Characters
 			base.Update(gameTime);
 		}
 
-		public bool CanMove(int x, int y)
+		public Tuple<bool, List<MapObject>> CanMove(int x, int y)
 		{
+			bool canMove = true;
+			List<MapObject> collidesWith = new List<MapObject>();
 			if (MapManager.Instance.CurrentMap.IsInMap(x, y))
 			{
-				if (MapManager.Instance.CurrentMap[x, y].Feature != null)
+				List<Component> collisionComponents = GetComponents(typeof(CollisionComponent));
+				collisionComponents.ForEach((comp) =>
 				{
-					return true;
-				}
+					CollisionComponent c = comp as CollisionComponent;
+					bool clear = c.CanMove(MapManager.Instance.CurrentMap[x, y].Type);
+					if (!clear)
+					{
+						canMove = false;
+					}
+					collidesWith.Add(MapManager.Instance.CurrentMap[x, y]);
+				});
+				MapManager.Instance.CurrentMap.GameObjects.ForEach((o) =>
+				{
+					if (o is MapObject)
+					{
+						MapObject m = o as MapObject;
+						if (m.X == x && m.Y == y)
+						{
+							collisionComponents.ForEach((comp) =>
+							{
+								CollisionComponent c = comp as CollisionComponent;
+								bool clear = c.CanMove(m.GetType());
+								if (!clear)
+								{
+									canMove = false;
+								}
+							});
+							collidesWith.Add(m);
+						}
+					}
+				});
 			}
-			return false;
+			return new Tuple<bool, List<MapObject>>(canMove, collidesWith);
+		}
+
+		void DoCollide(List<MapObject> collidesWith)
+		{
+			GetComponents(typeof(CollisionComponent)).ForEach((comp) =>
+			{
+				CollisionComponent c = comp as CollisionComponent;
+				c.OnCollide(collidesWith);
+			});
 		}
 
 		public void SetPosition(int newX, int newY)
 		{
-			if (CanMove(newX, newY))
+			var move = CanMove(newX, newY);
+			if (move.Item1)
 			{
 				Y = newY;
 				X = newX;
 			}
+			DoCollide(move.Item2);
 		}
 
 		public void ChangePosition(int newX = 0, int newY = 0, bool smooth = true)
 		{
-			if (smooth && moving == 0 && CanMove(X + newX, Y + newY))
+			var move = CanMove(X + newX, Y + newY);
+			if (smooth && moving == 0 && move.Item1)
 			{
 				moving = Camera.Instance.Scale;
 				if (newX > 0)
@@ -115,6 +160,7 @@ namespace PotentialHappiness.Characters
 			{
 				SetPosition(X + newX, Y + newY);
 			}
+			DoCollide(move.Item2);
 		}
 
 		void ChangePosition(Directions dir, bool smooth = true)

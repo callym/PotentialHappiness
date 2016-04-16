@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PotentialHappiness.Components;
+using PotentialHappiness.Map;
 
 namespace PotentialHappiness.GameObjects
 {
-	public class PixelGameObject : GameObject
+	public class PixelGameObject : MapObject
 	{
 		public Pixel Pixel;
 
@@ -41,17 +42,17 @@ namespace PotentialHappiness.GameObjects
 			}
 		}
 
-		public PixelGameObject() : base()
+		public PixelGameObject(TileMap map) : base(map)
 		{
 			Pixel = new Pixel(Color.Black);
 		}
 
-		public PixelGameObject(Color color) : this()
+		public PixelGameObject(Color color, TileMap map) : this(map)
 		{
 			Pixel.Color = color;
 		}
 
-		public PixelGameObject(Color color, int x, int y) : this(color)
+		public PixelGameObject(Color color, int x, int y, TileMap map) : this(color, map)
 		{
 			X = x;
 			Y = y;

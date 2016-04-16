@@ -71,7 +71,7 @@ namespace PotentialHappiness.Map.Generators
 			doneRooms?.Add(r);
 
 			Corridor corridor = new Corridor(Map);
-			corridor.Add(cells);
+			corridor.Add(cells, CellType.Floor);
 
 			corridors.Add(corridor);
 		}

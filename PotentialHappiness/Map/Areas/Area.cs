@@ -34,7 +34,7 @@ namespace PotentialHappiness.Map.Areas
 			});
 
 			Clear();
-			Add(newCells);
+			Add(newCells, CellType.Floor);
 		}
 	}
 }

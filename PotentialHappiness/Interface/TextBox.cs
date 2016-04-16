@@ -11,7 +11,7 @@ using PotentialHappiness.Extensions;
 
 namespace PotentialHappiness.Interface
 {
-	public class TextBox : GameObject
+	public class TextBox : InterfaceObject
 	{
 		public string Font { get; set; } = "handy-font";
 		public string Text { get; set; }

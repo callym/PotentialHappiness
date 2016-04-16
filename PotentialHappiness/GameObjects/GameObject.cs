@@ -50,15 +50,11 @@ namespace PotentialHappiness.GameObjects
 			componentsToRemove = new List<Component>();
 		}
 
-		public virtual void AddComponent(Component c)
-		{
-			componentsToAdd.Add(c);
-		}
+		public virtual void AddComponent(Component c) => componentsToAdd.Add(c);
 
-		public virtual void RemoveComponent(Component c)
-		{
-			componentsToRemove.Add(c);
-		}
+		public virtual void RemoveComponent(Component c) => componentsToRemove.Add(c);
+
+		public virtual List<Component> GetComponents(Type t) => Components.FindAll((c) => c.GetType().IsAssignableFrom(t));
 
 		public virtual void Unload()
 		{

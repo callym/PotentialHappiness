@@ -40,7 +40,7 @@ namespace PotentialHappiness.Screens
 			ic.AddEvent(Keys.Enter, Input.Pressed, (o, e) =>
 			{
 				MapScreen map = new MapScreen();
-				PlayableCharacter player = new PlayableCharacter(nameText.Text, Color.Cyan);
+				PlayableCharacter player = new PlayableCharacter(nameText.Text, Color.Cyan, MapManager.Instance.CurrentMap);
 				Room startingRoom = (Room)MapManager.Instance.CurrentMap.Features.Find((f) =>
 				{
 					return f is Room;

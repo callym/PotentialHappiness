@@ -9,6 +9,7 @@ using PotentialHappiness.Screens;
 using PotentialHappiness.Map.Cells;
 using PotentialHappiness.Map.Generators;
 using PotentialHappiness.Map.Areas;
+using PotentialHappiness.GameObjects;
 
 namespace PotentialHappiness.Map
 {
@@ -19,6 +20,7 @@ namespace PotentialHappiness.Map
 		public int MapHeight = 64;
 
 		public List<Feature> Features = new List<Feature>();
+		public List<GameObject> GameObjects = new List<GameObject>();
 
 		public TileMap()
 		{
