@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using PotentialHappiness.Components;
 using PotentialHappiness.GameObjects;
 using PotentialHappiness.Map;
+using PotentialHappiness.Screens;
 
 namespace PotentialHappiness.Characters
 {
@@ -25,7 +27,41 @@ namespace PotentialHappiness.Characters
 			input.AddEvent(Keys.Down, Input.Held, (o, e) => { this.ChangePosition(0, Speed); });
 
 			CollisionComponent collision = new CollisionComponent(this);
-			collision.AddEvent(Map.Cells.CellType.Wall, true, (o, e) => Program.Log("Collided"));
+			collision.AddEvent(Map.Cells.CellType.Wall, true, (o, e) =>
+			{
+				Program.Log("Collided");
+				GetComponents(typeof(LevelComponent)).ForEach((comp) =>
+				{
+					LevelComponent c = comp as LevelComponent;
+					if (c.Name == "Health")
+					{
+						c.CurrentLevel--;
+					}
+				});
+			});
+
+			Component nameString = new Component(this);
+			nameString.drawEvents += (o, e) =>
+			{
+				SpriteBatch s = o as SpriteBatch;
+				s.DrawString(
+					ScreenManager.Instance.Fonts["handy-font"],
+					Name,
+					Vector2.Zero,
+					Color.Magenta);
+			};
+
+			LevelComponent health = new LevelComponent("Health", this);
+			health.CurrentLevel = health.MaxLevel;
+			health.drawEvents += (o, e) =>
+			{
+				SpriteBatch s = o as SpriteBatch;
+				s.DrawString(
+					ScreenManager.Instance.Fonts["handy-font"],
+					$"health: {health.CurrentLevel}",
+					new Vector2(0, 64 - ScreenManager.Instance.Fonts["handy-font"].LineSpacing),
+					Color.Magenta);
+			};
 		}
 
 		int RepeatTime = 50;

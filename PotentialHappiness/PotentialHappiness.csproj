@@ -66,6 +66,7 @@
     <Compile Include="Components\CollisionComponent.cs" />
     <Compile Include="Components\Component.cs" />
     <Compile Include="Components\InputComponent.cs" />
+    <Compile Include="Components\LevelComponent.cs" />
     <Compile Include="Extensions\LINQExtensions.cs" />
     <Compile Include="GameObjects\GameObject.cs" />
     <Compile Include="Extensions\GraphicsExtensions.cs" />
