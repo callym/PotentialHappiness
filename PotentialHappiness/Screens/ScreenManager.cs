@@ -17,9 +17,9 @@ namespace PotentialHappiness.Screens
 		public SpriteBatch SpriteBatch;
 		public Texture2D PixelTexture;
 		public SpriteFont Font;
-		public List<GameScreen> ScreenList;
-		List<GameScreen> screensToAdd;
-		List<GameScreen> screensToRemove;
+		public GameList<GameScreen> ScreenList;
+//		List<GameScreen> screensToAdd;
+//		List<GameScreen> screensToRemove;
 		public ContentManager ContentManager;
 		public VirtualScreen VirtualScreen;
 
@@ -40,9 +40,30 @@ namespace PotentialHappiness.Screens
 
 		protected override void Initialize()
 		{
-			ScreenList = new List<GameScreen>();
-			screensToAdd = new List<GameScreen>();
-			screensToRemove = new List<GameScreen>();
+			ScreenList = new GameList<GameScreen>();
+			ScreenList.OnAddEach += (o, e) =>
+			{
+				if (o is GameScreen)
+				{
+					((GameScreen)o).LoadAssets();
+				}
+			};
+
+			ScreenList.OnRemoveEach += (o, e) =>
+			{
+				if (o is GameScreen)
+				{
+					((GameScreen)o).UnloadAssets();
+				}
+			};
+
+			ScreenList.OnRemove += (o, e) =>
+			{
+				if ((ScreenList.Count - ScreenList.ToRemove.Count + ScreenList.ToAdd.Count) < 1)
+				{
+					ScreenList.Add(new TestScreen());
+				}
+			};
 
 			VirtualScreen = new VirtualScreen(VirtualScreenSize, VirtualScreenSize, GraphicsDevice);
 			Window.ClientSizeChanged += new EventHandler<EventArgs>(Window_ClientSizeChanged);
@@ -70,14 +91,17 @@ namespace PotentialHappiness.Screens
 			PixelTexture = new Texture2D(GraphicsDevice, 1, 1);
 			PixelTexture.SetData(new Color[1] { Color.White });
 
-			AddScreen(new TitleScreen());
+			ScreenList.Add(new TitleScreen());
 
 			base.LoadContent();
 		}
 
 		protected override void UnloadContent()
 		{
-			ScreenList.ForEach(s => s.UnloadAssets());
+			ScreenList.ForEach(s =>
+			{
+				s.UnloadAssets();
+			});
 			ScreenList.Clear();
 			Content.Unload();
 
@@ -106,16 +130,7 @@ namespace PotentialHappiness.Screens
 				}
 			}
 
-			screensToAdd.ForEach(s =>
-			{
-				s.LoadAssets();
-				ScreenList.Add(s);
-			});
-			screensToAdd.Clear();
-
-			screensToRemove.ForEach(s => s.UnloadAssets());
-			ScreenList.RemoveAll(s => screensToRemove.Contains(s));
-			screensToRemove.Clear();
+			GameListManager.Instance.Update(gameTime);
 
 			VirtualScreen.Update();
 
@@ -162,25 +177,10 @@ namespace PotentialHappiness.Screens
 			base.Draw(gameTime);
 		}
 
-		public void AddScreen(GameScreen gameScreen)
-		{
-			screensToAdd.Add(gameScreen);
-		}
-
-		public void RemoveScreen(GameScreen gameScreen)
-		{
-			screensToRemove.Add(gameScreen);
-
-			if ((ScreenList.Count - screensToRemove.Count + screensToAdd.Count) < 1)
-			{
-				AddScreen(new TestScreen());
-			}
-		}
-
 		public void ChangeScreens(GameScreen currentScreen, GameScreen targetScreen)
 		{
-			AddScreen(targetScreen);
-			RemoveScreen(currentScreen);
+			ScreenList.Add(targetScreen);
+			ScreenList.Remove(currentScreen);
 		}
 
 		void Window_ClientSizeChanged(object sender, EventArgs e) => VirtualScreen.PhysicalResolutionChanged();

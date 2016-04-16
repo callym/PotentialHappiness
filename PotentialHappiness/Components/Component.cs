@@ -18,12 +18,12 @@ namespace PotentialHappiness.Components
 		public Component(GameObject parent)
 		{
 			Parent = parent;
-			Parent.AddComponent(this);
+			Parent.Components.Add(this);
 		}
 
 		public virtual void Unload()
 		{
-			Parent.RemoveComponent(this);
+			Parent.Components.Remove(this);
 			Parent = null;
 		}
 

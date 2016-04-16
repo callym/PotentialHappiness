@@ -68,6 +68,8 @@
     <Compile Include="Components\InputComponent.cs" />
     <Compile Include="Components\LevelComponent.cs" />
     <Compile Include="Extensions\LINQExtensions.cs" />
+    <Compile Include="GameList.cs" />
+    <Compile Include="GameListManager.cs" />
     <Compile Include="GameObjects\GameObject.cs" />
     <Compile Include="Extensions\GraphicsExtensions.cs" />
     <Compile Include="GameObjects\GemObject.cs" />

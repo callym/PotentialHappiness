@@ -13,14 +13,14 @@ namespace PotentialHappiness.GameObjects
 		public MapObject(TileMap map) : base()
 		{
 			Map = map;
-			Map.GameObjectsToAdd.Add(this);
+			Map.GameObjects.Add(this);
 		}
 
 		public override void Unload()
 		{
 			base.Unload();
 
-			Map.GameObjectsToRemove.Add(this);
+			Map.GameObjects.Remove(this);
 		}
 	}
 }

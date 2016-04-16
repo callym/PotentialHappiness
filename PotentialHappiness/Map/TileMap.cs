@@ -19,10 +19,8 @@ namespace PotentialHappiness.Map
 		public int MapWidth = 64;
 		public int MapHeight = 64;
 
-		public List<Feature> Features = new List<Feature>();
-		public List<GameObject> GameObjects = new List<GameObject>();
-		public List<GameObject> GameObjectsToAdd = new List<GameObject>();
-		public List<GameObject> GameObjectsToRemove = new List<GameObject>();
+		public GameList<Feature> Features = new GameList<Feature>();
+		public GameList<GameObject> GameObjects = new GameList<GameObject>();
 
 		public TileMap()
 		{
@@ -78,11 +76,6 @@ namespace PotentialHappiness.Map
 
 		public void Update(GameTime gameTime)
 		{
-			GameObjects.AddRange(GameObjectsToAdd);
-			GameObjectsToRemove.ForEach((o) => GameObjects.Remove(o));
-			GameObjectsToAdd.Clear();
-			GameObjectsToRemove.Clear();
-
 			GameObjects.ForEach((o) =>
 			{
 				o.Update(gameTime);

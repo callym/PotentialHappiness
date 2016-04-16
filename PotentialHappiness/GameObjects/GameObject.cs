@@ -11,9 +11,7 @@ namespace PotentialHappiness.GameObjects
 {
 	public class GameObject
 	{
-		public List<Component> Components;
-		List<Component> componentsToAdd;
-		List<Component> componentsToRemove;
+		public GameList<Component> Components;
 
 		bool _enabled = true;
 		public EventHandler OnEnable;
@@ -47,9 +45,7 @@ namespace PotentialHappiness.GameObjects
 		
 		public GameObject()
 		{
-			Components = new List<Component>();
-			componentsToAdd = new List<Component>();
-			componentsToRemove = new List<Component>();
+			Components = new GameList<Component>();
 
 			Init();
 		}
@@ -58,10 +54,6 @@ namespace PotentialHappiness.GameObjects
 		{
 
 		}
-
-		public virtual void AddComponent(Component c) => componentsToAdd.Add(c);
-
-		public virtual void RemoveComponent(Component c) => componentsToRemove.Add(c);
 
 		public virtual List<Component> GetComponents(Type t) => Components.FindAll((c) => t.IsAssignableFrom(c.GetType()));
 
@@ -79,10 +71,6 @@ namespace PotentialHappiness.GameObjects
 					c.Update(gameTime);
 				}
 			});
-			componentsToAdd.ForEach(c => Components.Add(c));
-			componentsToRemove.ForEach(c => Components.Remove(c));
-			componentsToAdd.Clear();
-			componentsToRemove.Clear();
 
 			if (unload)
 			{
