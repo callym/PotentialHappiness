@@ -13,13 +13,20 @@ namespace PotentialHappiness.Screens
 {
 	public class EndGameScreen : GameScreen
 	{
-		public EndGameScreen() : base()
+		public EndGameScreen(bool win) : base()
 		{
 			BackgroundColor = Color.Black;
 
 			TextBox titleText = new TextBox(this);
 			titleText.Area = ScreenManager.Instance.VirtualScreen.VirtualArea;
-			titleText.Text = "You have died.";
+			if (win)
+			{
+				titleText.Text = "Against all odds, you have become happy.";
+			}
+			else
+			{
+				titleText.Text = "You have died.";
+			}
 			titleText.Alignment = Extensions.GraphicsExtensions.Alignment.Top;
 
 			GameObject input = new GameObject();

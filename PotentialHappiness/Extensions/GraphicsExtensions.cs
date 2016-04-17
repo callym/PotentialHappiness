@@ -25,8 +25,9 @@ namespace PotentialHappiness.Extensions
 			return s.Split(NewLines, StringSplitOptions.None);
 		}
 
-		public static void DrawString(this SpriteBatch spriteBatch, SpriteFont font, string text, Rectangle bounds, Alignment align, Color color)
+		public static void DrawString(this SpriteBatch spriteBatch, string text, Rectangle bounds, Alignment align, Color color)
 		{
+			SpriteFont font = Screens.ScreenManager.Instance.Font;
 			if (NewLines.Any(s => text.Contains(s)))
 			{
 				Rectangle newBounds = bounds;
@@ -40,14 +41,17 @@ namespace PotentialHappiness.Extensions
 					}
 					else
 					{
-						bounds.Y += (font.LineSpacing * i);
+						if (i != 0)
+						{
+							bounds.Y += (font.LineSpacing);
+						}
 					}
-					spriteBatch.DrawString(font, lines[i], bounds, align, color);
+					spriteBatch.DrawString(lines[i], bounds, align, color);
 				}
 			}
 			else if (font.MeasureString(text).X > bounds.Width)
 			{
-				spriteBatch.DrawString(font, font.WrapText(text, bounds.Width), bounds, align, color);
+				spriteBatch.DrawString(font.WrapText(text, bounds.Width), bounds, align, color);
 			}
 			else
 			{
@@ -73,6 +77,19 @@ namespace PotentialHappiness.Extensions
 
 				spriteBatch.DrawString(font, text, pos, color, 0, origin, 1, SpriteEffects.None, 0);
 			}
+		}
+
+		public static void DrawString(this SpriteBatch sb, string text, Point position, Alignment align, Color color)
+		{
+			SpriteFont font = Screens.ScreenManager.Instance.Font;
+			Vector2 size = font.MeasureString(text);
+
+			if (align.HasFlag(Alignment.Center))
+			{
+				position = position - (size / 2).ToPoint();
+			}
+
+			sb.DrawString(font, text, position.ToVector2(), color);
 		}
 
 		public static string WrapText(this SpriteFont font, string text, float maxLineWidth)
@@ -123,17 +140,20 @@ namespace PotentialHappiness.Extensions
 			return sb.ToString();
 		}
 
-		public static void DrawRectangle(this SpriteBatch sb, Rectangle rectangle, Color color, bool fill, Color? fillColor = null)
+		public static void DrawRectangle(this SpriteBatch sb, Rectangle rectangle, Color color)
 		{
 			Texture2D t = Screens.ScreenManager.Instance.PixelTexture;
-			if (fill)
-			{
-				sb.Draw(t, rectangle, fillColor ?? color);
-			}
-			sb.Draw(t, new Rectangle(rectangle.Left, rectangle.Top, rectangle.Width, 1), color);
-			sb.Draw(t, new Rectangle(rectangle.Left, rectangle.Bottom, rectangle.Width, 1), color);
-			sb.Draw(t, new Rectangle(rectangle.Left, rectangle.Top + 1, 1, rectangle.Height - 1), color);
-			sb.Draw(t, new Rectangle(rectangle.Right, rectangle.Top, 1, rectangle.Height + 1), color);
+			sb.Draw(t, rectangle, color);
+		}
+
+		public static void DrawRectangle(this SpriteBatch sb, Rectangle rectangle, Color color, Color outlineColor)
+		{
+			Texture2D t = Screens.ScreenManager.Instance.PixelTexture;
+			sb.Draw(t, rectangle, color);
+			sb.Draw(t, new Rectangle(rectangle.Left, rectangle.Top, rectangle.Width, 1), outlineColor);
+			sb.Draw(t, new Rectangle(rectangle.Left, rectangle.Bottom, rectangle.Width, 1), outlineColor);
+			sb.Draw(t, new Rectangle(rectangle.Left, rectangle.Top + 1, 1, rectangle.Height - 1), outlineColor);
+			sb.Draw(t, new Rectangle(rectangle.Right, rectangle.Top, 1, rectangle.Height + 1), outlineColor);
 		}
 
 		public enum ColorTypes

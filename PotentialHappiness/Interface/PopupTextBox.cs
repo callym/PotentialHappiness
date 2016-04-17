@@ -90,19 +90,13 @@ namespace PotentialHappiness.Interface
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			ScreenManager.Instance.SpriteBatch.DrawRectangle(Area, Color.ToAlpha(0.5f), true, BackgroundColor);
-			ScreenManager.Instance.SpriteBatch.DrawString(ScreenManager.Instance.Font,
-															Text,
-															textArea,
-															Alignment,
-															Color);
+			spriteBatch.DrawRectangle(Area, BackgroundColor, Color);
+			spriteBatch.DrawString(Text, textArea, Alignment, Color);
 			if (Next != null)
 			{
 				for (int i = 0; i < 3; i++)
 				{
-					ScreenManager.Instance.SpriteBatch.Draw(ScreenManager.Instance.PixelTexture,
-															new Rectangle((Area.X + Area.Width - 2) - (i * 2), Area.Y + Area.Height - 2, 1, 1),
-															Color);
+					spriteBatch.DrawRectangle(new Rectangle((Area.X + Area.Width - 2) - (i * 2), Area.Y + Area.Height - 2, 1, 1), Color);
 				}
 			}
 		}

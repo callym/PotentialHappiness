@@ -16,8 +16,6 @@ namespace PotentialHappiness.Map.Cells
 
 		public CellType Type = CellType.Wall;
 
-		public TileMap Map = null;
-
 		public Feature Feature = null;
 
 		public MapCell(Color cellColor, int x, int y, TileMap map) : base(cellColor, x, y, map)

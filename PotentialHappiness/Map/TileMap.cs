@@ -23,6 +23,8 @@ namespace PotentialHappiness.Map
 		public GameList<Feature> Features = new GameList<Feature>();
 		public GameList<GameObject> GameObjects = new GameList<GameObject>();
 
+		public MapGenerator Generator;
+
 		public TileMap(GameScreen screen)
 		{
 			Screen = screen;
@@ -37,8 +39,8 @@ namespace PotentialHappiness.Map
 				Rows.Add(thisRow);
 			}
 
-			MapGenerator generator = new DungeonGenerator();
-			generator.Generate(this);
+			Generator = new DungeonGenerator();
+			Generator.Generate(this);
 
 			MapManager.Instance.Maps.Add(this);
 		}

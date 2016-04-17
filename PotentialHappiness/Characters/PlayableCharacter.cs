@@ -9,7 +9,9 @@ using Microsoft.Xna.Framework.Input;
 using PotentialHappiness.Components;
 using PotentialHappiness.GameObjects;
 using PotentialHappiness.Map;
+using PotentialHappiness.Map.Cells;
 using PotentialHappiness.Screens;
+using static PotentialHappiness.Extensions.GraphicsExtensions;
 
 namespace PotentialHappiness.Characters
 {
@@ -31,7 +33,7 @@ namespace PotentialHappiness.Characters
 			input.AddEvent(Keys.Down, Input.Held, (o, e) => { this.ChangePosition(0, Speed); });
 
 			CollisionComponent collision = new CollisionComponent(this);
-			collision.AddEvent(Map.Cells.CellType.Wall, true, (o, e) =>
+			collision.AddEvent(CellType.Wall, true, (o, e) =>
 			{
 				Program.Log("Collided");
 				GetComponents(typeof(LevelComponent)).ForEach((comp) =>
@@ -43,41 +45,55 @@ namespace PotentialHappiness.Characters
 					}
 				});
 			});
-
-			Component nameString = new Component(this);
-			nameString.drawEvents += (o, e) =>
+			collision.AddEvent(CellType.Floor, false, (o, e) =>
 			{
-				SpriteBatch s = o as SpriteBatch;
-				s.DrawString(
-					ScreenManager.Instance.Font,
-					Name,
-					Vector2.Zero,
-					Color.Magenta);
-			};
+				GetComponents(typeof(LevelComponent)).ForEach((comp) =>
+				{
+					LevelComponent c = comp as LevelComponent;
+					if (c.Name == "Health")
+					{
+						c.CurrentLevel -= 5;
+					}
+				});
+			});
 
 			LevelComponent health = new LevelComponent("Health", this);
+			health.MaxLevel = 1000;
 			health.CurrentLevel = health.MaxLevel;
 			health.drawEvents += (o, e) =>
 			{
 				SpriteBatch s = o as SpriteBatch;
-				s.DrawString(
-					ScreenManager.Instance.Font,
-					$"health: {health.CurrentLevel}",
-					new Vector2(0, 64 - ScreenManager.Instance.Font.LineSpacing),
-					Color.Magenta);
+				Color c = Color.DarkRed.ToAlpha(health.CurrentLevel / 1000f);
+				if (health.CurrentLevel < 250 && flash)
+				{
+					c = Color.Red;
+				}
+				this.Pixel.Color = c;
 			};
-			health.OnMinLevel += (o, e) => ScreenManager.Instance.ChangeScreens(MapManager.Instance.CurrentMap.Screen, new EndGameScreen());
+			health.OnMinLevel += (o, e) => ScreenManager.Instance.ChangeScreens(Map.Screen, new EndGameScreen(false));
 
 			base.Init();
 		}
 
 		int RepeatTime = 50;
 		int previousTime = 0;
+		int flashTime = 250;
+		int previousFlashTime = 0;
+		bool flash = false;
 		public override void Update(GameTime gameTime)
 		{
 			if (previousTime == 0)
 			{
 				previousTime = gameTime.TotalGameTime.Milliseconds;
+			}
+			if (previousFlashTime == 0)
+			{
+				previousFlashTime = gameTime.TotalGameTime.Milliseconds;
+			}
+			if (Math.Abs(gameTime.TotalGameTime.Milliseconds - previousFlashTime) > flashTime)
+			{
+				previousFlashTime = gameTime.TotalGameTime.Milliseconds;
+				flash = !flash;
 			}
 
 			if (Math.Abs(gameTime.TotalGameTime.Milliseconds - previousTime) > RepeatTime)
@@ -119,20 +135,20 @@ namespace PotentialHappiness.Characters
 		{
 			bool canMove = true;
 			List<MapObject> collidesWith = new List<MapObject>();
-			if (MapManager.Instance.CurrentMap.IsInMap(x, y))
+			if (Map.IsInMap(x, y))
 			{
 				List<Component> collisionComponents = GetComponents(typeof(CollisionComponent));
 				collisionComponents.ForEach((comp) =>
 				{
 					CollisionComponent c = comp as CollisionComponent;
-					bool clear = c.CanMove(MapManager.Instance.CurrentMap[x, y].Type);
+					bool clear = c.CanMove(Map[x, y].Type);
 					if (!clear)
 					{
 						canMove = false;
 					}
-					collidesWith.Add(MapManager.Instance.CurrentMap[x, y]);
+					collidesWith.Add(Map[x, y]);
 				});
-				MapManager.Instance.CurrentMap.GameObjects.ForEach((o) =>
+				Map.GameObjects.ForEach((o) =>
 				{
 					if (o is MapObject)
 					{
@@ -174,6 +190,7 @@ namespace PotentialHappiness.Characters
 				X = newX;
 			}
 			DoCollide(move.Item2);
+			Camera.Instance.SetPosition(Pixel.X, Pixel.Y);
 		}
 
 		public void ChangePosition(int newX = 0, int newY = 0, bool smooth = true)

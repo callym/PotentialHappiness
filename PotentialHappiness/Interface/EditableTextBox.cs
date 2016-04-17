@@ -94,11 +94,7 @@ namespace PotentialHappiness.Interface
 				fullText += "_";
 			}
 			fullText = fullText.ToUpper();
-			ScreenManager.Instance.SpriteBatch.DrawString(ScreenManager.Instance.Font,
-															fullText,
-															Area,
-															Alignment,
-															Color);
+			ScreenManager.Instance.SpriteBatch.DrawString(fullText, Area, Alignment, Color);
 		}
 	}
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using PotentialHappiness.AStar;
+using PotentialHappiness.Characters;
 using PotentialHappiness.GameObjects;
 using PotentialHappiness.Map.Areas;
 using PotentialHappiness.Map.Cells;
@@ -32,6 +33,16 @@ namespace PotentialHappiness.Map.Generators
 
 			Map.Features.AddRange(rooms);
 			Map.Features.AddRange(corridors);
+		}
+
+		public override void PlaceCharacter(PlayableCharacter c)
+		{
+			Room startingRoom = rooms.First();
+			c.SetPosition(startingRoom.Bounds.Center.X, startingRoom.Bounds.Center.Y);
+			GoalObject goal = new GoalObject(Color.Green, Map);
+			Room endRoom = FindFurthestRoom(startingRoom);
+			goal.X = endRoom.Bounds.Center.X;
+			goal.Y = endRoom.Bounds.Center.Y;
 		}
 
 		void GenerateRooms()
@@ -71,7 +82,6 @@ namespace PotentialHappiness.Map.Generators
 
 			rooms.ForEach((r) =>
 			{
-				//Program.Log(r.Cells.Count.ToString());
 				r.Cells.ForEach((c) =>
 				{
 					if (RandomManager.Instance.Next(100) < 10)
@@ -163,6 +173,28 @@ namespace PotentialHappiness.Map.Generators
 					int thisDistance = Math.Abs(room.Bounds.Center.X - r.Bounds.Center.X) + Math.Abs(room.Bounds.Center.Y - r.Bounds.Center.Y);
 
 					if (thisDistance < distance)
+					{
+						distance = thisDistance;
+						closest = r;
+					}
+				}
+			});
+
+			return closest;
+		}
+
+		Room FindFurthestRoom(Room room)
+		{
+			Room closest = room;
+			int distance = 0;
+
+			rooms.ForEach((r) =>
+			{
+				if (r != room)
+				{
+					int thisDistance = Math.Abs(room.Bounds.Center.X - r.Bounds.Center.X) + Math.Abs(room.Bounds.Center.Y - r.Bounds.Center.Y);
+
+					if (thisDistance > distance)
 					{
 						distance = thisDistance;
 						closest = r;

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using PotentialHappiness.Characters;
 using PotentialHappiness.Map.Cells;
 
 namespace PotentialHappiness.Map.Generators
@@ -14,6 +15,11 @@ namespace PotentialHappiness.Map.Generators
 		public virtual void Generate(TileMap map)
 		{
 			Map = map;
+		}
+
+		public virtual void PlaceCharacter(PlayableCharacter c)
+		{
+
 		}
 	}
 }

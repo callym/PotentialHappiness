@@ -39,17 +39,13 @@ namespace PotentialHappiness.Screens
 			ic.AddEvent(Keys.Enter, Input.Pressed, (o, e) =>
 			{
 				MapScreen map = new MapScreen();
+				PlayableCharacter player = new PlayableCharacter(nameText.Text, Color.Cyan, MapManager.Instance.CurrentMap);
+				CharacterManager.Instance.CurrentCharacter = player;
+				MapManager.Instance.CurrentMap.Generator.PlaceCharacter(player);
 
 				PopupTextBox ptb = new PopupTextBox(map);
 				ptb.Text = "this is a really long string that should not fit";
 
-				PlayableCharacter player = new PlayableCharacter(nameText.Text, Color.Cyan, MapManager.Instance.CurrentMap);
-				Room startingRoom = (Room)MapManager.Instance.CurrentMap.Features.Find((f) =>
-				{
-					return f is Room;
-				});
-				player.SetPosition(startingRoom.Bounds.Center.X, startingRoom.Bounds.Center.Y);
-				CharacterManager.Instance.CurrentCharacter = player;
 				ScreenManager.Instance.ChangeScreens(this, map);
 			});
 			GameObjects.Add(input);

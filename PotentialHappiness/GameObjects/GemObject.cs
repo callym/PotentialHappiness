@@ -12,6 +12,7 @@ namespace PotentialHappiness.GameObjects
 {
 	public class GemObject : PixelGameObject
 	{
+		int HealthBonus = 100;
 		public GemObject(Color color, TileMap map) : base(color, map)
 		{
 
@@ -35,7 +36,7 @@ namespace PotentialHappiness.GameObjects
 					LevelComponent c = comp as LevelComponent;
 					if (c.Name == "Health")
 					{
-						c.CurrentLevel++;
+						c.CurrentLevel += HealthBonus;
 					}
 				});
 				this.unload = true;

@@ -30,11 +30,7 @@ namespace PotentialHappiness.Interface
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			ScreenManager.Instance.SpriteBatch.DrawString(ScreenManager.Instance.Font,
-															Text,
-															Area,
-															Alignment,
-															Color);
+			ScreenManager.Instance.SpriteBatch.DrawString(Text, Area, Alignment, Color);
 			base.Draw(spriteBatch);
 		}
 	}
