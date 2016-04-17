@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,12 +20,17 @@ namespace PotentialHappiness.Extensions
 			"\n"
 		};
 
+		public static string[] SplitAtNewLines(this string s)
+		{
+			return s.Split(NewLines, StringSplitOptions.None);
+		}
+
 		public static void DrawString(this SpriteBatch spriteBatch, SpriteFont font, string text, Rectangle bounds, Alignment align, Color color)
 		{
 			if (NewLines.Any(s => text.Contains(s)))
 			{
 				Rectangle newBounds = bounds;
-				string[] lines = text.Split(NewLines, StringSplitOptions.None);
+				string[] lines = text.SplitAtNewLines();
 				for (int i = 0; i < lines.Length; i++)
 				{
 					if (align == Alignment.Center)
@@ -49,10 +55,6 @@ namespace PotentialHappiness.Extensions
 				Vector2 pos = bounds.Center.ToVector2();
 				Vector2 origin = size * 0.5f;
 
-				// convert to int for pixel-perfect
-				origin.X = (int)origin.X;
-				origin.Y = (int)origin.Y;
-
 				if (align.HasFlag(Alignment.Left))
 					origin.X += bounds.Width / 2 - size.X / 2;
 
@@ -64,6 +66,10 @@ namespace PotentialHappiness.Extensions
 
 				if (align.HasFlag(Alignment.Bottom))
 					origin.Y -= bounds.Height / 2 - size.Y / 2;
+
+				// convert to int for pixel-perfect
+				origin.X = (int)origin.X;
+				origin.Y = (int)origin.Y;
 
 				spriteBatch.DrawString(font, text, pos, color, 0, origin, 1, SpriteEffects.None, 0);
 			}
@@ -103,12 +109,12 @@ namespace PotentialHappiness.Extensions
 						}
 						else
 						{
-							sb.Append("\n" + WrapText(font, word.Insert(word.Length / 2, " ") + " ", maxLineWidth));
+							sb.Append("\r\n" + WrapText(font, word.Insert(word.Length / 2, " ") + " ", maxLineWidth));
 						}
 					}
 					else
 					{
-						sb.Append("\n" + word + " ");
+						sb.Append("\r\n" + word + " ");
 						lineWidth = size.X + spaceWidth;
 					}
 				}
@@ -126,7 +132,7 @@ namespace PotentialHappiness.Extensions
 			}
 			sb.Draw(t, new Rectangle(rectangle.Left, rectangle.Top, rectangle.Width, 1), color);
 			sb.Draw(t, new Rectangle(rectangle.Left, rectangle.Bottom, rectangle.Width, 1), color);
-			sb.Draw(t, new Rectangle(rectangle.Left, rectangle.Top, 1, rectangle.Height), color);
+			sb.Draw(t, new Rectangle(rectangle.Left, rectangle.Top + 1, 1, rectangle.Height - 1), color);
 			sb.Draw(t, new Rectangle(rectangle.Right, rectangle.Top, 1, rectangle.Height + 1), color);
 		}
 

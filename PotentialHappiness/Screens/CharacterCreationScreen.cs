@@ -41,7 +41,7 @@ namespace PotentialHappiness.Screens
 				MapScreen map = new MapScreen();
 
 				PopupTextBox ptb = new PopupTextBox(map);
-				ptb.Text = "blap\nblap";
+				ptb.Text = "this is a really long string that should not fit";
 
 				PlayableCharacter player = new PlayableCharacter(nameText.Text, Color.Cyan, MapManager.Instance.CurrentMap);
 				Room startingRoom = (Room)MapManager.Instance.CurrentMap.Features.Find((f) =>

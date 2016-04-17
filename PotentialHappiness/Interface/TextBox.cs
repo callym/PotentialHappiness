@@ -13,7 +13,7 @@ namespace PotentialHappiness.Interface
 {
 	public class TextBox : InterfaceObject
 	{
-		public string Text { get; set; }
+		public virtual string Text { get; set; }
 		public Rectangle Area { get; set; }
 		public Color Color { get; set; } = Color.White;
 		public GraphicsExtensions.Alignment Alignment { get; set; } = GraphicsExtensions.Alignment.Center;

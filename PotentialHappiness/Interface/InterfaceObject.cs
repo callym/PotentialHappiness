@@ -10,12 +10,19 @@ namespace PotentialHappiness.Interface
 {
 	public class InterfaceObject : GameObject
 	{
-		GameScreen Screen;
+		protected GameScreen Screen;
 
 		public InterfaceObject(GameScreen screen)
 		{
 			Screen = screen;
 			Screen.GameObjects.Add(this);
+		}
+
+		public override void Unload()
+		{
+			base.Unload();
+
+			Screen.GameObjects.Remove(this);
 		}
 	}
 }
