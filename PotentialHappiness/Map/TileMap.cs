@@ -42,7 +42,10 @@ namespace PotentialHappiness.Map
 			Generator = new DungeonGenerator();
 			Generator.Generate(this);
 
-			MapManager.Instance.Maps.Add(this);
+			if (!MapManager.Instance.Maps.Contains(this))
+			{
+				MapManager.Instance.Maps.Add(this);
+			}
 		}
 
 		public bool IsVisible(int x, int y)

@@ -15,8 +15,8 @@ namespace PotentialHappiness.Map.Generators
 {
 	public class DungeonGenerator : MapGenerator
 	{
-		HashSet<Room> rooms = new HashSet<Room>();
-		HashSet<Corridor> corridors = new HashSet<Corridor>();
+		List<Room> rooms = new List<Room>();
+		List<Corridor> corridors = new List<Corridor>();
 		int roomCount = RandomManager.Instance.Next(10, 20);
 		int minSize = 10;
 		int maxSize = 20;
@@ -26,6 +26,8 @@ namespace PotentialHappiness.Map.Generators
 			base.Generate(map);
 
 			GenerateRooms();
+
+			GenerateStairs();
 
 			GenerateGems();
 
@@ -39,7 +41,7 @@ namespace PotentialHappiness.Map.Generators
 		{
 			Room startingRoom = rooms.First();
 			c.SetPosition(startingRoom.Bounds.Center.X, startingRoom.Bounds.Center.Y);
-			GoalObject goal = new GoalObject(Color.Green, Map);
+			GoalObject goal = new GoalObject(Color.FloralWhite, Map);
 			Room endRoom = FindFurthestRoom(startingRoom);
 			goal.X = endRoom.Bounds.Center.X;
 			goal.Y = endRoom.Bounds.Center.Y;
@@ -73,6 +75,23 @@ namespace PotentialHappiness.Map.Generators
 			rooms.ForEach((r) => CreateCorridor(r));
 		}
 
+		void GenerateStairs()
+		{
+			List<Room> addedStairs = new List<Room>();
+			for (int i = 0; i <= 3; i++)
+			{
+				Room r = rooms[RandomManager.Instance.Next(rooms.Count - 1)];
+				while (addedStairs.Contains(r))
+				{
+					r = rooms[RandomManager.Instance.Next(rooms.Count - 1)];
+				}
+				StairObject stairs = new StairObject(Color.LightPink, Map);
+				MapCell c = r.Cells[RandomManager.Instance.Next(r.Cells.Count - 1)];
+				stairs.X = c.X;
+				stairs.Y = c.Y;
+			}
+		}
+
 		void GenerateGems()
 		{
 			int maxTotal = 100;
@@ -86,7 +105,7 @@ namespace PotentialHappiness.Map.Generators
 				{
 					if (RandomManager.Instance.Next(100) < 10)
 					{
-						GemObject gem = new GemObject(Color.HotPink, c.X, c.Y, Map);
+						GemObject gem = new GemObject(Color.Yellow, c.X, c.Y, Map);
 						current++;
 						currentRoom++;
 						Program.Log($"Created Gem at ({c.X}, {c.Y})");
@@ -133,7 +152,7 @@ namespace PotentialHappiness.Map.Generators
 			if (room.HasValue && IsValid(room))
 			{
 				Room successfulRoom = new Room(Map);
-				successfulRoom.Color = RandomManager.Instance.Color(Extensions.GraphicsExtensions.ColorTypes.Pastel);
+				successfulRoom.Color = Color.DimGray;
 				successfulRoom.Bounds = room.Value;
 				return successfulRoom;
 			}

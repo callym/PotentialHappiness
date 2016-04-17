@@ -39,13 +39,6 @@ namespace PotentialHappiness.GameObjects
 					{
 						ScreenManager.Instance.ChangeScreens(MapManager.Instance.CurrentMap.Screen, new EndGameScreen(true));
 					}
-					else
-					{
-						TileMap newMap = new TileMap(MapManager.Instance.CurrentMap.Screen);
-						(o as PlayableCharacter).Map = newMap;
-						newMap.Generator.PlaceCharacter(o as PlayableCharacter);
-						MapManager.Instance.CurrentMap = newMap;
-					}
 				}
 			});
 		}

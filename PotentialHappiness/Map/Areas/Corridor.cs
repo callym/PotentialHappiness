@@ -12,7 +12,7 @@ namespace PotentialHappiness.Map.Areas
 		public Corridor(TileMap map) : base(map)
 		{
 			Priority = 2;
-			Color = Color.Beige;
+			Color = Color.DimGray;
 		}
 	}
 }
