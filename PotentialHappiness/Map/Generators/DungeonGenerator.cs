@@ -33,16 +33,10 @@ namespace PotentialHappiness.Map.Generators
 
 			GenerateCorridors();
 
-			GenerateGoal();
-
 			Map.Features.AddRange(rooms);
 			Map.Features.AddRange(corridors);
-		}
 
-		public override void PlaceCharacter(PlayableCharacter c)
-		{
-			Room startingRoom = rooms.First();
-			c.SetPosition(startingRoom.Bounds.Center.X, startingRoom.Bounds.Center.Y);
+			GenerateGoal();
 		}
 
 		void GenerateRooms()
@@ -83,7 +77,7 @@ namespace PotentialHappiness.Map.Generators
 				{
 					r = rooms[RandomManager.Instance.Next(rooms.Count - 1)];
 				}
-				StairObject stairs = new StairObject(Color.LightPink, Map);
+				StairObject stairs = new StairObject(Map);
 				bool CellFree = false;
 				MapCell c;
 				do
@@ -125,7 +119,7 @@ namespace PotentialHappiness.Map.Generators
 					});
 					if (canPlace && RandomManager.Instance.Next(100) < 10)
 					{
-						GemObject gem = new GemObject(Color.Yellow, c.X, c.Y, Map);
+						GemObject gem = new GemObject(c.X, c.Y, Map);
 						current++;
 						currentRoom++;
 					}
@@ -135,26 +129,16 @@ namespace PotentialHappiness.Map.Generators
 
 		void GenerateGoal()
 		{
-			GoalObject goal = new GoalObject(Color.FloralWhite, Map);
-			Room endRoom = FindFurthestRoom(rooms.First());
-			goal.X = endRoom.Bounds.Center.X;
-			goal.Y = endRoom.Bounds.Center.Y;
-			if (!GoalObject.GoalsPlaced.HasFlag(GoalObject.Types.Anger))
+			if (RandomManager.Instance.Next(100) < 85)
 			{
-				goal.Message = "anger";
-				GoalObject.GoalsPlaced |= GoalObject.Types.Anger;
+				Room endRoom = FindFurthestRoom(rooms.First());
+				GoalManager.Instance.MakeGoal(endRoom.Bounds.Center.X, endRoom.Bounds.Center.Y, Map);
+				Program.Log("Made Goal");
 			}
-			else if (!GoalObject.GoalsPlaced.HasFlag(GoalObject.Types.Anxiety))
+			else
 			{
-				goal.Message = "anxiety";
-				GoalObject.GoalsPlaced |= GoalObject.Types.Anxiety;
+				Program.Log("No Goal");
 			}
-			else if (!GoalObject.GoalsPlaced.HasFlag(GoalObject.Types.Depression))
-			{
-				goal.Message = "depression";
-				GoalObject.GoalsPlaced |= GoalObject.Types.Depression;
-			}
-			Program.Log($"Placed goal ({goal.Message})");
 		}
 
 		void CreateCorridor(Room r, List<Room> doneRooms = null)

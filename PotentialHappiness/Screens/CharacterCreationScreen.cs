@@ -38,10 +38,14 @@ namespace PotentialHappiness.Screens
 			InputComponent ic = new InputComponent(input);
 			ic.AddEvent(Keys.Enter, Input.Pressed, (o, e) =>
 			{
+				GoalManager.Instance.Reload();
+
 				MapScreen map = new MapScreen();
 				PlayableCharacter player = new PlayableCharacter(nameText.Text, Color.Cyan, MapManager.Instance.CurrentMap);
 				CharacterManager.Instance.CurrentCharacter = player;
-				MapManager.Instance.CurrentMap.Generator.PlaceCharacter(player);
+
+				Room startingRoom = MapManager.Instance.CurrentMap.Features.Find((f) => f is Room) as Room;
+				player.SetPosition(startingRoom.Bounds.Center.X, startingRoom.Bounds.Center.Y);
 
 				PopupTextBox ptb = new PopupTextBox(map);
 				ptb.Text = "this is a really long string that should not fit";

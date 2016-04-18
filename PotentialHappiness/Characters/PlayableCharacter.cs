@@ -52,10 +52,19 @@ namespace PotentialHappiness.Characters
 			health.drawEvents += (o, e) =>
 			{
 				SpriteBatch s = o as SpriteBatch;
-				Color c = Color.DarkRed.ToAlpha(health.CurrentLevel / 1000f);
+				Color c = Color.Black;
+				if (GoalManager.Instance.Current == 1)
+				{
+					c = Color.DarkRed;
+				}
+				else if (GoalManager.Instance.Current == 2)
+				{
+					c = Color.SpringGreen;
+				}
+				c = c.ToAlpha(health.CurrentLevel / 1000f);
 				if (health.CurrentLevel < 250 && flash)
 				{
-					c = Color.Red;
+					c = c.ToAlpha(100f);
 				}
 				this.Pixel.Color = c;
 			};

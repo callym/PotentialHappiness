@@ -13,12 +13,12 @@ namespace PotentialHappiness.GameObjects
 	public class GemObject : PixelGameObject
 	{
 		int HealthBonus = 100;
-		public GemObject(Color color, TileMap map) : base(color, map)
+		public GemObject(TileMap map) : base(Color.PaleGoldenrod, map)
 		{
 
 		}
 
-		public GemObject(Color color, int x, int y, TileMap map) : base(color, x, y, map)
+		public GemObject(int x, int y, TileMap map) : base(Color.PaleGoldenrod, x, y, map)
 		{
 
 		}

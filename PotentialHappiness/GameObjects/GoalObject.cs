@@ -14,18 +14,6 @@ namespace PotentialHappiness.GameObjects
 {
 	public class GoalObject : PixelGameObject
 	{
-		[Flags]
-		public enum Types
-		{
-			Depression,
-			Anxiety,
-			Anger
-		}
-		public static Types GoalsPlaced;
-
-		static int numberOfGoals = Enum.GetNames(typeof(Types)).Length;
-		static int currentNumber = 0;
-
 		public string Message = "collected this strange gem";
 		public GoalObject(Color color, TileMap map) : base(color, map)
 		{
@@ -47,13 +35,13 @@ namespace PotentialHappiness.GameObjects
 				if (!unload && o == CharacterManager.Instance.CurrentCharacter)
 				{
 					unload = true;
-					currentNumber++;
+					GoalManager.Instance.Current++;
 					PopupTextBox box = new PopupTextBox(MapManager.Instance.CurrentMap.Screen);
 					box.Text = Message;
 					box.OnClose += (oo, ee) =>
 					{
 						Program.Log(Message);
-						if (currentNumber >= numberOfGoals)
+						if (GoalManager.Instance.Current >= GoalManager.Instance.Aim)
 						{
 							ScreenManager.Instance.ChangeScreens(MapManager.Instance.CurrentMap.Screen, new EndGameScreen(true));
 						}

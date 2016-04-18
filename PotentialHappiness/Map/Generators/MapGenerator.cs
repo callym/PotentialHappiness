@@ -16,10 +16,5 @@ namespace PotentialHappiness.Map.Generators
 		{
 			Map = map;
 		}
-
-		public virtual void PlaceCharacter(PlayableCharacter c)
-		{
-
-		}
 	}
 }
