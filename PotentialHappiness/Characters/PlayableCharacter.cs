@@ -33,18 +33,7 @@ namespace PotentialHappiness.Characters
 			input.AddEvent(Keys.Down, Input.Held, (o, e) => { this.ChangePosition(0, Speed); });
 
 			CollisionComponent collision = new CollisionComponent(this);
-			collision.AddEvent(CellType.Wall, true, (o, e) =>
-			{
-				Program.Log("Collided");
-				GetComponents(typeof(LevelComponent)).ForEach((comp) =>
-				{
-					LevelComponent c = comp as LevelComponent;
-					if (c.Name == "Health")
-					{
-						c.CurrentLevel--;
-					}
-				});
-			});
+			collision.AddEvent(CellType.Wall, true);
 			collision.AddEvent(CellType.Floor, false, (o, e) =>
 			{
 				GetComponents(typeof(LevelComponent)).ForEach((comp) =>
