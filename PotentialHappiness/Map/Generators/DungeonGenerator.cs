@@ -86,7 +86,21 @@ namespace PotentialHappiness.Map.Generators
 					r = rooms[RandomManager.Instance.Next(rooms.Count - 1)];
 				}
 				StairObject stairs = new StairObject(Color.LightPink, Map);
-				MapCell c = r.Cells[RandomManager.Instance.Next(r.Cells.Count - 1)];
+				bool CellFree = false;
+				MapCell c;
+				do
+				{
+					c = r.Cells[RandomManager.Instance.Next(r.Cells.Count - 1)];
+					Map.GameObjects.ForEach((o) =>
+					{
+						if (o != c && o.X != c.X && o.Y != c.Y)
+						{
+							CellFree = true;
+						}
+					});
+				}
+				while (CellFree);
+
 				stairs.X = c.X;
 				stairs.Y = c.Y;
 			}
@@ -103,7 +117,15 @@ namespace PotentialHappiness.Map.Generators
 			{
 				r.Cells.ForEach((c) =>
 				{
-					if (RandomManager.Instance.Next(100) < 10)
+					bool canPlace = true;
+					Map.GameObjects.ForEach((o) =>
+					{
+						if (o != c && o.X == c.X && o.Y == c.Y)
+						{
+							canPlace = false;
+						}
+					});
+					if (canPlace && RandomManager.Instance.Next(100) < 10)
 					{
 						GemObject gem = new GemObject(Color.Yellow, c.X, c.Y, Map);
 						current++;
