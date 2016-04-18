@@ -15,7 +15,7 @@ namespace PotentialHappiness
 
 		private RandomManager()
 		{
-			Random = new Random(12);
+			Random = new Random(/*12*/);
 		}
 
 		public int Next() => Random.Next();

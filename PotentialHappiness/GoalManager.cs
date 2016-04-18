@@ -14,11 +14,12 @@ namespace PotentialHappiness
 		[Flags]
 		public enum Types
 		{
-			Anger		= 1,
-			Anxiety		= 2,
-			Depression	= 4
+			Rage		= 1,
+			Despair		= 2,
+			Anxiety		= 4,
+			Joy			= 8
 		}
-		public Types? GoalsPlaced;
+		public int GoalsPlaced;
 
 		public int Aim { get; } = Enum.GetNames(typeof(Types)).Length;
 		public int Current = 0;
@@ -31,7 +32,7 @@ namespace PotentialHappiness
 		public void Reload()
 		{
 			Current = 0;
-			GoalsPlaced = null;
+			GoalsPlaced = 0;
 		}
 
 		public void MakeGoal(int x, int y, TileMap map)
@@ -41,41 +42,34 @@ namespace PotentialHappiness
 				return;
 			}
 
-			GoalObject goal = new GoalObject(Color.LightPink, x, y, map);
-			
-			if (!GoalsPlaced.HasValue || !GoalsPlaced.Value.HasFlag(Types.Anger))
+			GoalObject goal = new GoalObject(Color.MediumVioletRed, x, y, map);
+			GoalsPlaced++;
+		}
+
+		public Tuple<string, string> GetGoalMessage()
+		{
+			switch (Current)
 			{
-				goal.Message = "anger";
-				if (!GoalsPlaced.HasValue)
-				{
-					GoalsPlaced = Types.Anger;
-				}
-				else
-				{
-					GoalsPlaced |= Types.Anger;
-				}
-			}
-			else if (!GoalsPlaced.Value.HasFlag(Types.Anxiety))
-			{
-				goal.Message = "anxiety";
-				GoalsPlaced |= Types.Anxiety;
-			}
-			else if (!GoalsPlaced.Value.HasFlag(Types.Depression))
-			{
-				goal.Message = "depression";
-				GoalsPlaced |= Types.Depression;
+				case 1: // rage
+					return new Tuple<string, string>("you approach the gem quietly, waves of anger seem to be radiating from it.",
+													"rage");
+				case 2: // despair
+					return new Tuple<string, string>("the world starts to swim grey before your eyes, but you know that you have to pick the gem up",
+													"despair");
+				case 3: // anxiety
+					return new Tuple<string, string>("the gem is vibrating with an anxious energy, you could feel it from across the room",
+													"anxiety");
+				case 4: // joy
+					return new Tuple<string, string>("this gem seems unlike the others, its surface looks soft and worn, as if it had been held a lot",
+													"joy");
+				default:
+					return new Tuple<string, string>("", "");
 			}
 		}
 
 		public bool AllGoalsPlaced()
 		{
-			if (!GoalsPlaced.HasValue)
-			{
-				return false;
-			}
-			return GoalsPlaced.Value.HasFlag(Types.Anger) &&
-					GoalsPlaced.Value.HasFlag(Types.Anxiety) &&
-					GoalsPlaced.Value.HasFlag(Types.Depression);
+			return (GoalsPlaced >= Aim);
 		}
 
 		private static readonly Lazy<GoalManager> lazy = new Lazy<GoalManager>(() => new GoalManager());

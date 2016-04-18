@@ -14,7 +14,6 @@ namespace PotentialHappiness.GameObjects
 {
 	public class GoalObject : PixelGameObject
 	{
-		public string Message = "collected this strange gem";
 		public GoalObject(Color color, TileMap map) : base(color, map)
 		{
 
@@ -36,15 +35,22 @@ namespace PotentialHappiness.GameObjects
 				{
 					unload = true;
 					GoalManager.Instance.Current++;
-					PopupTextBox box = new PopupTextBox(MapManager.Instance.CurrentMap.Screen);
-					box.Text = Message;
+					PopupTextBox box = new PopupTextBox(Map.Screen);
+					Tuple<string, string> goalMessages = GoalManager.Instance.GetGoalMessage();
+					box.Text = goalMessages.Item1;
 					box.OnClose += (oo, ee) =>
 					{
-						Program.Log(Message);
-						if (GoalManager.Instance.Current >= GoalManager.Instance.Aim)
+						PopupTextBox collectedBox = new PopupTextBox(Map.Screen);
+						collectedBox.Color = Color.Gray;
+						collectedBox.Text = $"you have picked up the [gem of {goalMessages.Item2}]";
+						Program.Log($"{goalMessages.Item1} (collected {goalMessages.Item2})");
+						collectedBox.OnClose += (ooo, eee) =>
 						{
-							ScreenManager.Instance.ChangeScreens(MapManager.Instance.CurrentMap.Screen, new EndGameScreen(true));
-						}
+							if (GoalManager.Instance.Current >= GoalManager.Instance.Aim)
+							{
+								ScreenManager.Instance.ChangeScreens(MapManager.Instance.CurrentMap.Screen, new EndGameScreen(true));
+							}
+						};
 					};
 				}
 			});

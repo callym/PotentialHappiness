@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using PotentialHappiness.Components;
 using PotentialHappiness.GameObjects;
+using PotentialHappiness.Interface;
 using PotentialHappiness.Map;
 using PotentialHappiness.Map.Cells;
 using PotentialHappiness.Screens;
@@ -27,10 +28,38 @@ namespace PotentialHappiness.Characters
 		protected override void Init()
 		{
 			InputComponent input = new InputComponent(this);
-			input.AddEvent(Keys.Left, Input.Held, (o, e) => { this.ChangePosition(-Speed, 0); });
-			input.AddEvent(Keys.Right, Input.Held, (o, e) => { this.ChangePosition(Speed, 0); });
-			input.AddEvent(Keys.Up, Input.Held, (o, e) => { this.ChangePosition(0, -Speed); });
-			input.AddEvent(Keys.Down, Input.Held, (o, e) => { this.ChangePosition(0, Speed); });
+			input.AddEvent(Keys.Left, Input.Held, (o, e) =>
+			{
+				if (!Map.Screen.HasPopup)
+				{
+					this.ChangePosition(-Speed, 0);
+					DoMessage();
+				}
+			});
+			input.AddEvent(Keys.Right, Input.Held, (o, e) =>
+			{
+				if (!Map.Screen.HasPopup)
+				{
+					this.ChangePosition(Speed, 0);
+					DoMessage();
+				}
+			});
+			input.AddEvent(Keys.Up, Input.Held, (o, e) =>
+			{
+				if (!Map.Screen.HasPopup)
+				{
+					this.ChangePosition(0, -Speed);
+					DoMessage();
+				}
+			});
+			input.AddEvent(Keys.Down, Input.Held, (o, e) =>
+			{
+				if (!Map.Screen.HasPopup)
+				{
+					this.ChangePosition(0, Speed);
+					DoMessage();
+				}
+			});
 
 			CollisionComponent collision = new CollisionComponent(this);
 			collision.AddEvent(CellType.Wall, true);
@@ -49,17 +78,26 @@ namespace PotentialHappiness.Characters
 			LevelComponent health = new LevelComponent("Health", this);
 			health.MaxLevel = 1000;
 			health.CurrentLevel = health.MaxLevel;
-			health.drawEvents += (o, e) =>
+			health.DrawEvents += (o, e) =>
 			{
 				SpriteBatch s = o as SpriteBatch;
 				Color c = Color.Black;
-				if (GoalManager.Instance.Current == 1)
+				switch (GoalManager.Instance.Current)
 				{
-					c = Color.DarkRed;
-				}
-				else if (GoalManager.Instance.Current == 2)
-				{
-					c = Color.SpringGreen;
+					case 1: // rage
+						c = Color.DarkRed;
+						break;
+					case 2: // despair
+						c = new Color(73, 73, 112); //midnight blue desaturated - https://bgrins.github.io/TinyColor/ to hsv then reduce s then copy rgb
+						break;
+					case 3: //anxiety
+						c = Color.Salmon;
+						break;
+					case 4: //joy - getting this ends the game!
+						c = Color.SpringGreen;
+						break;
+					default:
+						break;
 				}
 				c = c.ToAlpha(health.CurrentLevel / 1000f);
 				if (health.CurrentLevel < 250 && flash)
@@ -71,6 +109,33 @@ namespace PotentialHappiness.Characters
 			health.OnMinLevel += (o, e) => ScreenManager.Instance.ChangeScreens(Map.Screen, new EndGameScreen(false));
 
 			base.Init();
+		}
+
+		int cooldown = 0;
+		void DoMessage()
+		{
+			List<string> messages = new List<string>()
+			{
+				"this is so... tiring...",
+				"why do i even bother?",
+				"haha even if i do get the gems, what then",
+				"why did i even agree to do this",
+				"my feet hurt so much",
+				"what sort of wizard would even make these",
+				"ugh i can't wait to get back into bed",
+				"i'm going to fail anyway",
+				"these gems have been lost for ages, why would i be able to find them",
+				"i'm nothing special, why do i have to do this",
+				"i bet they don't even exist",
+				"i am not in the mood to be walking around this cave"
+			};
+			if (RandomManager.Instance.Next(100) < 5 && cooldown <= 0)
+			{
+				PopupTextBox ptb = new PopupTextBox(Map.Screen);
+				ptb.Text = messages[RandomManager.Instance.Next(messages.Count)];
+				cooldown = 100;
+			}
+			cooldown--;
 		}
 
 		int RepeatTime = 50;

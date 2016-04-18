@@ -129,15 +129,18 @@ namespace PotentialHappiness.Map.Generators
 
 		void GenerateGoal()
 		{
-			if (RandomManager.Instance.Next(100) < 85)
+			if (MapManager.Instance.Maps.Count >= 1)
 			{
-				Room endRoom = FindFurthestRoom(rooms.First());
-				GoalManager.Instance.MakeGoal(endRoom.Bounds.Center.X, endRoom.Bounds.Center.Y, Map);
-				Program.Log("Made Goal");
-			}
-			else
-			{
-				Program.Log("No Goal");
+				if (RandomManager.Instance.Next(100) < 85)
+				{
+					Room endRoom = FindFurthestRoom(rooms.First());
+					GoalManager.Instance.MakeGoal(endRoom.Bounds.Center.X, endRoom.Bounds.Center.Y, Map);
+					Program.Log("Made Goal");
+				}
+				else
+				{
+					Program.Log("No Goal");
+				}
 			}
 		}
 

@@ -23,7 +23,7 @@ namespace PotentialHappiness.Screens
 
 			TextBox titleText = new TextBox(this);
 			titleText.Area = ScreenManager.Instance.VirtualScreen.VirtualArea;
-			titleText.Text = "What is your name?";
+			titleText.Text = "my name is";
 			titleText.Alignment = Extensions.GraphicsExtensions.Alignment.Top;
 
 			EditableTextBox nameText = new EditableTextBox(this);
@@ -32,7 +32,7 @@ namespace PotentialHappiness.Screens
 			nameBox.Y += spacing;
 			nameBox.Height -= spacing;
 			nameText.Area = nameBox;
-			nameText.Text = "callym";
+			nameText.Text = "LUNA";
 
 			GameObject input = new GameObject();
 			InputComponent ic = new InputComponent(input);
@@ -41,14 +41,20 @@ namespace PotentialHappiness.Screens
 				GoalManager.Instance.Reload();
 
 				MapScreen map = new MapScreen();
-				PlayableCharacter player = new PlayableCharacter(nameText.Text, Color.Cyan, MapManager.Instance.CurrentMap);
+				PlayableCharacter player = new PlayableCharacter(nameText.Text, Color.Black, MapManager.Instance.CurrentMap);
 				CharacterManager.Instance.CurrentCharacter = player;
 
 				Room startingRoom = MapManager.Instance.CurrentMap.Features.Find((f) => f is Room) as Room;
 				player.SetPosition(startingRoom.Bounds.Center.X, startingRoom.Bounds.Center.Y);
 
 				PopupTextBox ptb = new PopupTextBox(map);
-				ptb.Text = "this is a really long string that should not fit";
+				ptb.Text = "phew ! after three whole days travelling, let's go see whether these magic gems are as powerful as i was told";
+				ptb.OnClose += (oo, ee) =>
+				{
+					PopupTextBox infoBox = new PopupTextBox(map);
+					infoBox.Color = Color.Gray;
+					infoBox.Text = "move around using the [arrow] keys. collect the regular gems that are on the floor to keep yourself from fading away";
+				};
 
 				ScreenManager.Instance.ChangeScreens(this, map);
 			});

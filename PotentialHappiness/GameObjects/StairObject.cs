@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using PotentialHappiness.Characters;
 using PotentialHappiness.Components;
+using PotentialHappiness.Interface;
 using PotentialHappiness.Map;
 using PotentialHappiness.Map.Areas;
 
@@ -13,6 +14,7 @@ namespace PotentialHappiness.GameObjects
 {
 	public class StairObject : PixelGameObject
 	{
+		static bool first = true;
 		bool Up = RandomManager.Instance.Next(0, 99) > 49;
 		public StairObject(TileMap map) : base(Color.LightSeaGreen, map)
 		{
@@ -33,25 +35,34 @@ namespace PotentialHappiness.GameObjects
 			{
 				if (o == CharacterManager.Instance.CurrentCharacter)
 				{
-					TileMap newMap;
-					if ((!Up || MapManager.Instance.Maps.Count <= 1) && !GoalManager.Instance.AllGoalsPlaced())
+					if (first)
 					{
-						newMap = new TileMap(MapManager.Instance.CurrentMap.Screen);
+						PopupTextBox ptb = new PopupTextBox(Map.Screen);
+						ptb.Text = "these old stairs look quite scary, but maybe what i'm looking for will be deeper? i can always come back later";
+						first = false;
 					}
 					else
 					{
-						do
+						TileMap newMap;
+						if ((!Up || MapManager.Instance.Maps.Count <= 1) && !GoalManager.Instance.AllGoalsPlaced())
 						{
-							newMap = MapManager.Instance.Maps[RandomManager.Instance.Next(MapManager.Instance.Maps.Count)];
+							newMap = new TileMap(MapManager.Instance.CurrentMap.Screen);
 						}
-						while (newMap == Map);
+						else
+						{
+							do
+							{
+								newMap = MapManager.Instance.Maps[RandomManager.Instance.Next(MapManager.Instance.Maps.Count)];
+							}
+							while (newMap == Map);
+						}
+
+						(o as PlayableCharacter).Map = newMap;
+						Room startingRoom = newMap.Features.Find((f) => f is Room) as Room;
+						(o as PlayableCharacter).SetPosition(startingRoom.Bounds.Center.X, startingRoom.Bounds.Center.Y);
+
+						MapManager.Instance.CurrentMap = newMap;
 					}
-
-					(o as PlayableCharacter).Map = newMap;
-					Room startingRoom = newMap.Features.Find((f) => f is Room) as Room;
-					(o as PlayableCharacter).SetPosition(startingRoom.Bounds.Center.X, startingRoom.Bounds.Center.Y);
-
-					MapManager.Instance.CurrentMap = newMap;
 				}
 			});
 		}

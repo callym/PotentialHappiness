@@ -13,7 +13,8 @@ namespace PotentialHappiness.Components
 	{
 		public GameObject Parent { get; private set; }
 		public bool Enabled = true;
-		public EventHandler drawEvents;
+		public EventHandler DrawEvents;
+		public EventHandler UpdateEvents;
 
 		public Component(GameObject parent)
 		{
@@ -29,12 +30,12 @@ namespace PotentialHappiness.Components
 
 		public virtual void Update(GameTime gameTime)
 		{
-
+			UpdateEvents?.Invoke(gameTime, EventArgs.Empty);
 		}
 
 		public virtual void Draw(SpriteBatch spriteBatch)
 		{
-			drawEvents?.Invoke(spriteBatch, EventArgs.Empty);
+			DrawEvents?.Invoke(spriteBatch, EventArgs.Empty);
 		}
 	}
 }

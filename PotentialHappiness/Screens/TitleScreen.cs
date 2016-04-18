@@ -19,11 +19,17 @@ namespace PotentialHappiness.Screens
 
 			TextBox titleText = new TextBox(this);
 			titleText.Area = ScreenManager.Instance.VirtualScreen.VirtualArea;
-			titleText.Text = "Potential\nHappiness";
+			titleText.Text = "potential\nhappiness";
+
+			TextBox enterText = new TextBox(this);
+			enterText.Area = ScreenManager.Instance.VirtualScreen.VirtualArea;
+			enterText.Text = "[enter]";
+			enterText.Alignment = Extensions.GraphicsExtensions.Alignment.Bottom;
+			enterText.Color = Color.Gray;
 
 			GameObject input = new GameObject();
 			InputComponent ic = new InputComponent(input);
-			ic.AddEvent(new[] { Keys.Space, Keys.Enter }, Input.Pressed, (o, e) => { ScreenManager.Instance.ChangeScreens(this, new CharacterCreationScreen()); });
+			ic.AddEvent(Keys.Enter, Input.Pressed, (o, e) => { ScreenManager.Instance.ChangeScreens(this, new IntroScreen()); });
 			GameObjects.Add(input);
 		}
 	}

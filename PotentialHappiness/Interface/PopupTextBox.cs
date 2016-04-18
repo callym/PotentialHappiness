@@ -14,7 +14,20 @@ namespace PotentialHappiness.Interface
 {
 	public class PopupTextBox : TextBox
 	{
-		public PopupTextBox Next = null;
+		PopupTextBox _next = null;
+		public PopupTextBox Next
+		{
+			get
+			{
+				return _next;
+			}
+			set
+			{
+				_next = value;
+				_next.OnClose = OnClose;
+				_next.Color = Color;
+			}
+		}
 		public override string Text
 		{
 			get
@@ -24,7 +37,7 @@ namespace PotentialHappiness.Interface
 
 			set
 			{
-				string wrapped = ScreenManager.Instance.Font.WrapText(value, Area.Width);
+				string wrapped = ScreenManager.Instance.Font.WrapText(value, textArea.Width);
 				List<string> wrappedLines = wrapped.SplitAtNewLines().ToList();
 				string forthis = "";
 				string fornext = "";
@@ -45,10 +58,9 @@ namespace PotentialHappiness.Interface
 					if (Next == null)
 					{
 						Next = new PopupTextBox(Screen, key);
-						Next.Visible = false;
-						Next.Enabled = false;
-						Next.OnClose = OnClose;
 					}
+					Next.Visible = false;
+					Next.Enabled = false;
 					Next.Text = fornext.Replace("\r\n", "");
 				}
 			}
@@ -77,8 +89,30 @@ namespace PotentialHappiness.Interface
 			}
 		}
 
+		public override bool Visible
+		{
+			get
+			{
+				return base.Visible;
+			}
+
+			set
+			{
+				base.Visible = value;
+				if (base.Visible)
+				{
+					Screen.NumberOfPopups++;
+				}
+				else
+				{
+					Screen.NumberOfPopups--;
+				}
+			}
+		}
+
 		public PopupTextBox(GameScreen screen, Keys nextKey = Keys.Enter) : base(screen)
 		{
+			Visible = true;
 			int height = (ScreenManager.Instance.Font.LineSpacing * numLines) + 2;
 			Area = new Rectangle(0, 63 - height, 63, height);
 			textArea = Area;

@@ -13,6 +13,8 @@ namespace PotentialHappiness.Screens
 	{
 		public bool IsActive = true;
 		public bool IsPopup = false;
+		public int NumberOfPopups = 0;
+		public bool HasPopup => NumberOfPopups > 0;
 		public Color BackgroundColor = Color.Black;
 		public GameList<GameObject> GameObjects;
 

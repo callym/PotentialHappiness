@@ -45,7 +45,7 @@ namespace PotentialHappiness.GameObjects
 			}
 		}
 
-		public bool Visible = true;
+		public virtual bool Visible { get; set; } = true;
 
 		public virtual int X { get; set; } = 0;
 		public virtual int Y { get; set; } = 0;
@@ -68,6 +68,8 @@ namespace PotentialHappiness.GameObjects
 
 		public virtual void Unload()
 		{
+			this.Enabled = false;
+			this.Visible = false;
 			Components.ForEach(c => c.Unload());
 		}
 
