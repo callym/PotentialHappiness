@@ -47,6 +47,7 @@ namespace PotentialHappiness.Interface
 						Next = new PopupTextBox(Screen, key);
 						Next.Visible = false;
 						Next.Enabled = false;
+						Next.OnClose = OnClose;
 					}
 					Next.Text = fornext.Replace("\r\n", "");
 				}
@@ -58,6 +59,23 @@ namespace PotentialHappiness.Interface
 
 		Color BackgroundColor;
 		Rectangle textArea;
+
+		EventHandler _onClose;
+		public EventHandler OnClose
+		{
+			get
+			{
+				return _onClose;
+			}
+			set
+			{
+				_onClose = value;
+				if (Next != null)
+				{
+					Next.OnClose = value;
+				}
+			}
+		}
 
 		public PopupTextBox(GameScreen screen, Keys nextKey = Keys.Enter) : base(screen)
 		{
@@ -74,12 +92,16 @@ namespace PotentialHappiness.Interface
 			InputComponent ic = new InputComponent(this);
 			ic.AddEvent(key, Input.Pressed, (o, e) =>
 			{
-				this.unload = true;
 				if (this.Next != null)
 				{
 					this.Next.Visible = true;
 					this.Next.Enabled = true;
 				}
+				else
+				{
+					OnClose?.Invoke(this, EventArgs.Empty);
+				}
+				this.unload = true;
 			});
 		}
 

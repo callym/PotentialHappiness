@@ -33,17 +33,19 @@ namespace PotentialHappiness.GameObjects
 				if (o == CharacterManager.Instance.CurrentCharacter)
 				{
 					TileMap newMap;
-					if (Up && (MapManager.Instance.Maps.Count > 1))
+					if ((!Up || (MapManager.Instance.Maps.Count <= 1)) && !(GoalObject.GoalsPlaced.HasFlag(GoalObject.Types.Anger) &&
+																			GoalObject.GoalsPlaced.HasFlag(GoalObject.Types.Anxiety) &&
+																			GoalObject.GoalsPlaced.HasFlag(GoalObject.Types.Depression)))
 					{
-						newMap = MapManager.Instance.Maps[RandomManager.Instance.Next(MapManager.Instance.Maps.Count - 1)];
-						while (newMap == Map)
-						{
-							newMap = MapManager.Instance.Maps[RandomManager.Instance.Next(MapManager.Instance.Maps.Count - 1)];
-						}
+						newMap = new TileMap(MapManager.Instance.CurrentMap.Screen);
 					}
 					else
 					{
-						newMap = new TileMap(MapManager.Instance.CurrentMap.Screen);
+						do
+						{
+							newMap = MapManager.Instance.Maps[RandomManager.Instance.Next(MapManager.Instance.Maps.Count)];
+						}
+						while (newMap == Map);
 					}
 					(o as PlayableCharacter).Map = newMap;
 					newMap.Generator.PlaceCharacter(o as PlayableCharacter);

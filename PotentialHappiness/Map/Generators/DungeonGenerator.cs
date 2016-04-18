@@ -33,6 +33,8 @@ namespace PotentialHappiness.Map.Generators
 
 			GenerateCorridors();
 
+			GenerateGoal();
+
 			Map.Features.AddRange(rooms);
 			Map.Features.AddRange(corridors);
 		}
@@ -41,10 +43,6 @@ namespace PotentialHappiness.Map.Generators
 		{
 			Room startingRoom = rooms.First();
 			c.SetPosition(startingRoom.Bounds.Center.X, startingRoom.Bounds.Center.Y);
-			GoalObject goal = new GoalObject(Color.FloralWhite, Map);
-			Room endRoom = FindFurthestRoom(startingRoom);
-			goal.X = endRoom.Bounds.Center.X;
-			goal.Y = endRoom.Bounds.Center.Y;
 		}
 
 		void GenerateRooms()
@@ -130,10 +128,33 @@ namespace PotentialHappiness.Map.Generators
 						GemObject gem = new GemObject(Color.Yellow, c.X, c.Y, Map);
 						current++;
 						currentRoom++;
-						Program.Log($"Created Gem at ({c.X}, {c.Y})");
 					}
 				});
 			});
+		}
+
+		void GenerateGoal()
+		{
+			GoalObject goal = new GoalObject(Color.FloralWhite, Map);
+			Room endRoom = FindFurthestRoom(rooms.First());
+			goal.X = endRoom.Bounds.Center.X;
+			goal.Y = endRoom.Bounds.Center.Y;
+			if (!GoalObject.GoalsPlaced.HasFlag(GoalObject.Types.Anger))
+			{
+				goal.Message = "anger";
+				GoalObject.GoalsPlaced |= GoalObject.Types.Anger;
+			}
+			else if (!GoalObject.GoalsPlaced.HasFlag(GoalObject.Types.Anxiety))
+			{
+				goal.Message = "anxiety";
+				GoalObject.GoalsPlaced |= GoalObject.Types.Anxiety;
+			}
+			else if (!GoalObject.GoalsPlaced.HasFlag(GoalObject.Types.Depression))
+			{
+				goal.Message = "depression";
+				GoalObject.GoalsPlaced |= GoalObject.Types.Depression;
+			}
+			Program.Log($"Placed goal ({goal.Message})");
 		}
 
 		void CreateCorridor(Room r, List<Room> doneRooms = null)

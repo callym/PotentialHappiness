@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using PotentialHappiness.Characters;
 using PotentialHappiness.Components;
+using PotentialHappiness.Interface;
 using PotentialHappiness.Map;
 using PotentialHappiness.Screens;
 
@@ -13,8 +14,19 @@ namespace PotentialHappiness.GameObjects
 {
 	public class GoalObject : PixelGameObject
 	{
-		static int numberOfGoals = 3;
+		[Flags]
+		public enum Types
+		{
+			Depression,
+			Anxiety,
+			Anger
+		}
+		public static Types GoalsPlaced;
+
+		static int numberOfGoals = Enum.GetNames(typeof(Types)).Length;
 		static int currentNumber = 0;
+
+		public string Message = "collected this strange gem";
 		public GoalObject(Color color, TileMap map) : base(color, map)
 		{
 
@@ -32,14 +44,20 @@ namespace PotentialHappiness.GameObjects
 			CollisionComponent collision = new CollisionComponent(this);
 			collision.AddEvent(typeof(PlayableCharacter), false, (o, e) =>
 			{
-				if (o == CharacterManager.Instance.CurrentCharacter)
+				if (!unload && o == CharacterManager.Instance.CurrentCharacter)
 				{
+					unload = true;
 					currentNumber++;
-					if (currentNumber >= numberOfGoals)
+					PopupTextBox box = new PopupTextBox(MapManager.Instance.CurrentMap.Screen);
+					box.Text = Message;
+					box.OnClose += (oo, ee) =>
 					{
-						ScreenManager.Instance.ChangeScreens(MapManager.Instance.CurrentMap.Screen, new EndGameScreen(true));
-					}
-					this.unload = true;
+						Program.Log(Message);
+						if (currentNumber >= numberOfGoals)
+						{
+							ScreenManager.Instance.ChangeScreens(MapManager.Instance.CurrentMap.Screen, new EndGameScreen(true));
+						}
+					};
 				}
 			});
 		}
