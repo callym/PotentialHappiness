@@ -39,6 +39,7 @@ namespace PotentialHappiness.GameObjects
 					{
 						ScreenManager.Instance.ChangeScreens(MapManager.Instance.CurrentMap.Screen, new EndGameScreen(true));
 					}
+					this.unload = true;
 				}
 			});
 		}
